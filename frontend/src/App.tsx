@@ -1,6 +1,11 @@
-import './App.css'
-import Hero from '@/components/Hero'
+import '@/App.css'
 import NavBar from '@/components/NavBar'
+import Hero from '@/components/Hero'
+import Work from '@/components/Work'
+import Projects from '@/components/Projects'
+import About from '@/components/About'
+import Footer from '@/components/Footer'
+
 
 
 function App() {
@@ -8,6 +13,10 @@ function App() {
     <div className="max-w-480 mx-auto">
       <NavBar/>
       <Hero />
+      <Work />
+      <Projects />
+      <About />
+      <Footer />
     </div>
   )
 }
