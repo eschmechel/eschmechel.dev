@@ -99,7 +99,7 @@ function getElementType(href?: string, scrollToHash?: Hash): 'button' | 'a' | 'h
 }
 
 const VariantButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(function VariantButton(
-  { variant = 'solid', fillClass = 'bg-accent-600', textClass = 'text-white', className, children, disabled, href, scrollToHash, onHashClick, target, rel },
+  { variant = 'solid', fillClass = 'bg-accent-600', textClass = 'text-white', className, children, disabled, href, scrollToHash, onHashClick, target, rel, ...rest },
   _ref
 ) {
   const variantClasses = getVariantClasses(variant)
@@ -112,7 +112,7 @@ const VariantButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPr
   const finalClass = as === 'button' ? commonClass : cn('group inline-block', base, variantClasses, className)
 
   return (
-    <Button as={as} href={href} onClick={handleClick as any} className={finalClass} disabled={disabled} target={target} rel={rel}>
+    <Button as={as} href={href} onClick={handleClick as any} className={finalClass} disabled={disabled} target={target} rel={rel} {...rest}>
       {renderInnerContent(children, contentClass, fillSpan, glowSpanClass)}
     </Button>
   )
