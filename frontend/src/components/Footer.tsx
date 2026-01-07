@@ -31,8 +31,8 @@ export default function Footer(){
                         <VariantButton
                             type="button"
                             data-cal-link="eschmechel/coffee-chat"
-                            className="py-2 bg-linear-to-r from-accent-500 to-accent-700 border-transparent"
-                            fillClass="bg-accent-300"
+                            className="py-2 bg-accent-500"
+                            fillClass="bg-linear-to-r from-accent-500 to-accent-700"
                             textClass="text-white"
                             variant="solid"
                         >
@@ -42,8 +42,8 @@ export default function Footer(){
                         <VariantButton
                             type="button"
                             data-cal-link="eschmechel/virtual-meeting"
-                            className="py-2 bg-linear-to-r from-accent-500 to-accent-700 border-transparent"
-                            fillClass="bg-accent-300"
+                            className="py-2 bg-accent-500"
+                            fillClass="bg-linear-to-r from-accent-500 to-accent-700"
                             textClass="text-white"
                             variant="solid"
                         >
@@ -53,8 +53,8 @@ export default function Footer(){
                         <div className="flex flex-row gap-1.5">
                             <VariantButton
                                 href="mailto:elliottschmechel@gmail.com"
-                                className="flex-1 py-1.5 bg-linear-to-r from-accent-500 to-accent-700 border-transparent text-sm"
-                                fillClass="bg-accent-300"
+                                className="flex-1 py-1.5 bg-accent-500 text-sm"
+                                fillClass="bg-linear-to-r from-accent-500 to-accent-700"
                                 textClass="text-white"
                                 variant="solid"
                             >
@@ -64,8 +64,8 @@ export default function Footer(){
                             <VariantButton
                                 href="/Elliott_Schmechel_Resume.pdf"
                                 rel="noopener noreferrer"
-                                className="flex-1 py-1.5 bg-linear-to-r from-accent-500 to-accent-700 border-transparent text-sm"
-                                fillClass="bg-accent-300"
+                                className="flex-1 py-1.5 bg-accent-500 text-sm"
+                                fillClass="bg-linear-to-r from-accent-500 to-accent-700"
                                 textClass="text-white"
                                 variant="solid"
                             >

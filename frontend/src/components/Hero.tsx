@@ -28,7 +28,7 @@ export default function Hero() {
                 <VariantButton
                     className="bg-accent-500 py-2 px-4 font-medium text-lg"
                     variant="highlight"
-                    fillClass="bg-accent-700"
+                    fillClass="bg-linear-to-r from-accent-500 to-accent-700"
                     textClass="text-white"
                     href="mailto:elliottschmechel@gmail.com">
                         Contact Me
