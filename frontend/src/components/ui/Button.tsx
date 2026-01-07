@@ -10,9 +10,11 @@ interface ButtonProps {
   className?: string
   disabled?: boolean
   children?: React.ReactNode
+  target?: string
+  rel?: string
 }
 
-export default function Button({ as = 'button', href, onClick, className, disabled, children }: ButtonProps) {
+export default function Button({ as = 'button', href, onClick, className, disabled, children, target, rel }: ButtonProps) {
   if (as === 'hashlink') {
     return (
       <HashLink to={href ?? '#'} onClick={onClick as any} className={className}>
@@ -23,7 +25,7 @@ export default function Button({ as = 'button', href, onClick, className, disabl
 
   if (as === 'a') {
     return (
-      <a href={href} onClick={onClick as any} className={className} aria-disabled={disabled}>
+      <a href={href} onClick={onClick as any} className={className} aria-disabled={disabled} target={target} rel={rel}>
         {children}
       </a>
     )

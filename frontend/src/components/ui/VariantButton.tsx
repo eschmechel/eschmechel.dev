@@ -20,6 +20,10 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   scrollToHash?: Hash
   /** Optional override handler when a scrollToHash is provided */
   onHashClick?: (hash: Hash, e: React.MouseEvent) => void
+  /** target attribute for links (e.g. "_blank") */
+  target?: string
+  /** rel attribute for links (e.g. "noopener noreferrer") */
+  rel?: string
 }
 
 const base = 'inline-flex items-center justify-center gap-2 relative overflow-hidden select-none rounded-md px-4 py-2 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2'
@@ -95,7 +99,7 @@ function getElementType(href?: string, scrollToHash?: Hash): 'button' | 'a' | 'h
 }
 
 const VariantButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(function VariantButton(
-  { variant = 'solid', fillClass = 'bg-accent-600', textClass = 'text-white', className, children, disabled, href, scrollToHash, onHashClick },
+  { variant = 'solid', fillClass = 'bg-accent-600', textClass = 'text-white', className, children, disabled, href, scrollToHash, onHashClick, target, rel },
   _ref
 ) {
   const variantClasses = getVariantClasses(variant)
@@ -108,7 +112,7 @@ const VariantButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPr
   const finalClass = as === 'button' ? commonClass : cn('group inline-block', base, variantClasses, className)
 
   return (
-    <Button as={as} href={href} onClick={handleClick as any} className={finalClass} disabled={disabled}>
+    <Button as={as} href={href} onClick={handleClick as any} className={finalClass} disabled={disabled} target={target} rel={rel}>
       {renderInnerContent(children, contentClass, fillSpan, glowSpanClass)}
     </Button>
   )
