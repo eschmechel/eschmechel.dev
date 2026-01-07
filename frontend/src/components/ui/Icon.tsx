@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { useEffect, useState } from 'react'
+import { cn } from '@/lib/utils'
 import { isSafariAgent } from '@/utils/browser'
 
 
@@ -16,7 +17,7 @@ const staticIcons = import.meta.glob('@/assets/icons/*-static.svg', {
   import: 'default' 
 }) as Record<string, string>
 
-type LineIconName = 'briefcase' | 'map-marker' // add more as needed
+type LineIconName = 'briefcase' | 'map-marker' | 'arrow-right' | 'arrow-left' | 'arrow-up' | 'arrow-down' | 'github' | 'linkedin' | 'twitter-x' | 'bluesky' // add more as needed
 
 interface IconProps {
   // Option 1: Use line-md icon by name
@@ -40,11 +41,20 @@ function renderLineIcon(name: string, isSafari: boolean, className?: string, ari
     return null
   }
 
+  // Ensure the inlined SVG scales to the parent's width/height by removing
+  // hardcoded width/height attributes and forcing 100% sizing on the <svg>.
+  let processed = svgContent.replace(/\s*(?:width|height)=(["']).*?\1/gi, '')
+  processed = processed.replace(/<svg([^>]*)>/i, (_m, attrs) => {
+    // preserve existing attributes, then add responsive sizing and block display
+    return `<svg${attrs} width="100%" height="100%" style="display:block;width:100%;height:100%" preserveAspectRatio="xMidYMid meet">`
+  })
+
   return (
     <span 
-      className={className} 
+      className={cn('inline-block', className)} 
       aria-label={ariaLabel}
-      dangerouslySetInnerHTML={{ __html: svgContent }}
+      // eslint-disable-next-line react/no-danger
+      dangerouslySetInnerHTML={{ __html: processed }}
     />
   )
 }
