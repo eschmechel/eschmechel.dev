@@ -10,7 +10,7 @@ import Footer from '@/components/Footer'
 
 function App() {
   return (
-    <div className="max-w-480 mx-auto">
+    <div className="max-w-480 mx-auto min-h-screen">
       <NavBar/>
       <Hero />
       <Work />
