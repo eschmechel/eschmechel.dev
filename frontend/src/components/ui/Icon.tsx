@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { cn } from '@/lib/utils'
 import { isSafariAgent } from '@/utils/browser'
 
@@ -17,7 +17,7 @@ const staticIcons = import.meta.glob('@/assets/icons/*-static.svg', {
   import: 'default' 
 }) as Record<string, string>
 
-type LineIconName = 'briefcase' | 'map-marker' | 'arrow-right' | 'arrow-left' | 'arrow-up' | 'arrow-down' | 'github' | 'linkedin' | 'twitter-x' | 'bluesky' // add more as needed
+type LineIconName = 'briefcase' | 'map-marker' | 'arrow-right' | 'arrow-left' | 'arrow-up' | 'arrow-down' | 'github' | 'linkedin' | 'twitter-x' | 'bluesky' | 'buy-me-a-coffee-filled' | 'computer' | 'file-download' | 'person-add' // add more as needed
 
 interface IconProps {
   // Option 1: Use line-md icon by name
@@ -29,7 +29,15 @@ interface IconProps {
   ariaLabel?: string
 }
 
-function renderLineIcon(name: string, isSafari: boolean, className?: string, ariaLabel?: string) {
+interface RenderLineIconProps {
+  name: string
+  isSafari: boolean
+  isVisible: boolean
+  className?: string
+  ariaLabel?: string
+}
+
+function renderLineIcon({ name, isSafari, isVisible, className, ariaLabel }: RenderLineIconProps) {
   const iconPath = isSafari 
     ? `/src/assets/icons/${name}-static.svg`
     : `/src/assets/icons/${name}-animated.svg`
@@ -46,7 +54,9 @@ function renderLineIcon(name: string, isSafari: boolean, className?: string, ari
   let processed = svgContent.replace(/\s*(?:width|height)=(["']).*?\1/gi, '')
   processed = processed.replace(/<svg([^>]*)>/i, (_m, attrs) => {
     // preserve existing attributes, then add responsive sizing and block display
-    return `<svg${attrs} width="100%" height="100%" style="display:block;width:100%;height:100%" preserveAspectRatio="xMidYMid meet">`
+    // Add animation-play-state based on visibility
+    const animationStyle = isVisible ? '' : ';animation-play-state:paused'
+    return `<svg${attrs} width="100%" height="100%" style="display:block;width:100%;height:100%${animationStyle}" preserveAspectRatio="xMidYMid meet">`
   })
 
   return (
@@ -67,7 +77,7 @@ function renderCustomIcon(
 
   if (isSafari && fallback) {
     return typeof fallback === 'string' 
-      ? <img src={fallback} alt={ariaLabel ?? ''} className={className} />
+      ? <img src={fallback} alt={ariaLabel ?? ''} className={className}/>
       : <span className={className} aria-label={ariaLabel}>{fallback}</span>
   }
 
@@ -82,13 +92,37 @@ function renderCustomIcon(
 
 export default function Icon({ name, children, fallback, className, ariaLabel }: IconProps) {
   const [isSafari, setIsSafari] = useState(false)
+  const [isVisible, setIsVisible] = useState(false)
+  const ref = React.useRef<HTMLSpanElement>(null)
 
   useEffect(() => {
     setIsSafari(isSafariAgent())
   }, [])
 
+  useEffect(() => {
+    if (!ref.current) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsVisible(true)
+            // Optionally unobserve after first intersection
+            // observer.unobserve(entry.target)
+          }
+        })
+      },
+      { threshold: 0.1 } // Trigger when 10% visible
+    )
+
+    observer.observe(ref.current)
+
+    return () => observer.disconnect()
+  }, [])
+
   if (name) {
-    return renderLineIcon(name, isSafari, className, ariaLabel)
+    const content = renderLineIcon({ name, isSafari, isVisible, className, ariaLabel })
+    return <span ref={ref} style={{ display: 'inline-block' }}>{content}</span>
   }
 
   return renderCustomIcon({ children, fallback, className, ariaLabel }, isSafari)
