@@ -24,7 +24,7 @@ function createTypography<T extends keyof React.JSX.IntrinsicElements>(
 // Display - Hero sections and major headings
 export const Display = createTypography(
   "h1",
-  "font-sans font-semibold text-text text-3xl tracking-wide leading-tight md:text-5xl md:leading-tight lg:text-6xl lg:leading-[1.1]"
+  "font-sans font-semibold text-text text-3xl tracking-wide leading-tight md:text-5xl md:leading-tight lg:leading-[1.1]"
 )
 
 // H1 - Main page heading
