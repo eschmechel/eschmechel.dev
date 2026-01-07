@@ -1,7 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Syne:wght@400..800&display=swap');
-@import "tailwindcss";
+
+@import "tailwindcss/preflight";
+@import "tailwindcss/utilities";
 
 @layer base {
+  /* global scroll behaviour with reduced-motion respect */
   html {
     scroll-behavior: smooth;
   }
@@ -11,31 +14,39 @@
       scroll-behavior: auto;
     }
   }
-}
 
-@theme {
+  /* CSS variables for theme/colors/fonts */
+  :root {
+    /* Neutrals */
+    --color-bg: #0B0D0F;
+    --color-surface: #121418;
+    --color-muted: #1C2128;
+    --color-border: #2B3138;
+    --color-text: #E6EAF2;
+    --color-text-muted: #A9B1BD;
 
+    /* Accent - Electric Blue */
+    --color-accent-50: #E7F1FF;
+    --color-accent-300: #6AA6FF;
+    --color-accent-500: #3B82F6;
+    --color-accent-700: #1D4ED8;
 
-  /* Neutrals */
-  --color-bg: #0B0D0F;
-  --color-surface: #121418;
-  --color-muted: #1C2128;
-  --color-border: #2B3138;
-  --color-text: #E6EAF2;
-  --color-text-muted: #A9B1BD;
-  
-  /* Accent - Electric Blue */
-  --color-accent-50: #E7F1FF;
-  --color-accent-300: #6AA6FF;
-  --color-accent-500: #3B82F6;
-  --color-accent-700: #1D4ED8;
-  
-  /* Status */
-  --color-ok: #22C55E;
-  --color-warn: #F59E0B;
-  --color-error: #EF4444;
+    /* Status */
+    --color-ok: #22C55E;
+    --color-warn: #F59E0B;
+    --color-error: #EF4444;
 
-  /* Fonts */
-  --font-family-sans: "Lexend", ui-sans-serif, system-ui;
-  --font-family-display: "Syne", ui-sans-serif, system-ui;
+    /* Fonts */
+    --font-family-sans: "Lexend", ui-sans-serif, system-ui;
+    --font-family-display: "Syne", ui-sans-serif, system-ui;
+  }
+
+  /* sensible defaults for the app */
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-family-sans);
+    background-color: var(--color-bg);
+    color: var(--color-text);
+  }
 }
