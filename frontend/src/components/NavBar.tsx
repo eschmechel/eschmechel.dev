@@ -41,7 +41,7 @@ export default function NavBar(){
     }, [lastScrollY, scrollTimeout])
 
     return (
-        <div className={`sticky top-0 z-50 transition-transform duration-700 ${isVisible ? 'translate-y-0' : '-translate-y-full'}`}>
+        <div id="navBar" className={`max-w-7xl mx-auto sticky top-0 z-50 transition-transform duration-700 ${isVisible ? 'translate-y-0' : '-translate-y-full'}`}>
             <div className={`backdrop-blur-md bg-bg/80 content-center flex flex-row justify-center py-2 font-medium text-xl text-text ${isAtTop ? '' : 'border-b border-border'}`}>
                 <nav className={`flex flex-row justify-center gap-4 w-full max-w-480`}>
                     <VariantButton href="#contacts" className="bg-transparent border-transparent" fillClass="bg-accent-500" variant="ghost">Contact</VariantButton>
