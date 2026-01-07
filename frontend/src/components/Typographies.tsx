@@ -2,7 +2,7 @@ import * as React from "react"
 import { cn } from "@/lib/utils"
 
 interface TypographyProps {
-  children: React.ReactNode
+  children?: React.ReactNode
   className?: string
 }
 
@@ -24,7 +24,7 @@ function createTypography<T extends keyof React.JSX.IntrinsicElements>(
 // Display - Hero sections and major headings
 export const Display = createTypography(
   "h1",
-  "font-display font-bold text-text text-4xl leading-tight tracking-tight md:text-5xl md:leading-tight lg:text-6xl lg:leading-[1.1] xl:text-7xl xl:leading-[1.1]"
+  "font-sans font-semibold text-text text-5xl tracking-wide leading-tight md:text-6xl md:leading-tight lg:text-7xl lg:leading-[1.1]"
 )
 
 // H1 - Main page heading
