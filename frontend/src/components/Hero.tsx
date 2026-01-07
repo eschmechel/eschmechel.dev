@@ -4,8 +4,8 @@ import VariantButton from '@/components/ui/VariantButton'
 
 export default function Hero() {
     return (
-        <div>
-            <Display id="heroHeader" className="text-center mt-8 mb-4">
+        <div className="max-w-7xl flex flex-col justify-center mx-auto">
+            <Display id="heroHeader" className="text-center mt-10 mb-4">
                 Elliott Schmechel
             </Display>
 
@@ -24,7 +24,7 @@ export default function Hero() {
                 </div>
             </div>
 
-            <div id = "heroButtons" className="flex justify-center mt-10 gap-3">
+            <div id = "contacts" className="flex justify-center mt-10 gap-3">
                 <VariantButton
                     className="bg-accent-500 py-2 px-4 font-medium text-lg"
                     variant="highlight"
@@ -39,6 +39,7 @@ export default function Hero() {
                     variant="transparent"
                     textClass="text-text"
                     href="/Elliott_Schmechel_Resume.pdf"
+                    // target="_blank"  currently dont know if this is useful until resume is uploaded
                     rel="noopener noreferrer">
                         Resume
                 </VariantButton>
