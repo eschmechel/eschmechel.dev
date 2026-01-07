@@ -8,7 +8,15 @@ export interface ScrollToHashOptions {
 }
 
 export function scrollToHash(hash: string, opts: ScrollToHashOptions = {}): boolean {
-  if (typeof window === 'undefined' || !hash) return false
+  if (typeof window === 'undefined') return false
+
+  // Handle scroll to top when hash is empty or just '#'
+  if (!hash || hash === '#') {
+    const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const behavior: ScrollBehavior = opts.behavior ?? (prefersReduced ? 'auto' : 'smooth')
+    window.scrollTo({ top: 0, behavior })
+    return true
+  }
 
   const rawHash = hash.startsWith('#') ? hash : `#${hash}`
   const id = rawHash.slice(1)
