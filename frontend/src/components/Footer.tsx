@@ -3,6 +3,7 @@ import { getCalApi } from "@calcom/embed-react";
 import HashLink from "@/components/ui/HashLink";
 import { Link, H4, Body } from '@/components/Typographies';
 import Icon from './ui/Icon';
+import VariantButton from './ui/VariantButton';
 
 export default function Footer(){
     useEffect(() => {
@@ -27,36 +28,50 @@ export default function Footer(){
                     </Body>
                     <div id="footerCalendarButtons" className="flex flex-col gap-1.5">
 
-                        <button
+                        <VariantButton
+                            type="button"
                             data-cal-link="eschmechel/coffee-chat"
-                            className="py-2 bg-linear-to-r from-accent-500 to-accent-700 text-white rounded-md font-medium hover:bg-accent-600 transition-colors focus:outline-none focus:ring-2 focus:ring-accent-500 w-full"
+                            className="py-2 bg-linear-to-r from-accent-500 to-accent-700 border-transparent"
+                            fillClass="bg-accent-300"
+                            textClass="text-white"
+                            variant="solid"
                         >
                             <Icon name="buy-me-a-coffee-filled" className="w-5 h-5 inline-block align-sub mr-1" ariaLabel="Coffee Icon" />
                             Schedule Coffee Chat
-                        </button>
-                        <button
+                        </VariantButton>
+                        <VariantButton
+                            type="button"
                             data-cal-link="eschmechel/virtual-meeting"
-                            className="py-2 bg-linear-to-r from-accent-500 to-accent-700 text-white rounded-md font-medium hover:bg-accent-600 transition-colors focus:outline-none focus:ring-2 focus:ring-accent-500 w-full"
+                            className="py-2 bg-linear-to-r from-accent-500 to-accent-700 border-transparent"
+                            fillClass="bg-accent-300"
+                            textClass="text-white"
+                            variant="solid"
                         >
                             <Icon name="computer" className="w-5 h-5 inline-block align-sub mr-1" ariaLabel="Computer Icon"/>
                             Schedule Virtual Meeting
-                        </button>
+                        </VariantButton>
                         <div className="flex flex-row gap-1.5">
-                            <a
+                            <VariantButton
                                 href="mailto:elliottschmechel@gmail.com"
-                                className="flex-1 py-1.5 bg-linear-to-r from-accent-500 to-accent-700 text-white rounded-md text-sm font-medium hover:bg-accent-600 transition-colors focus:outline-none focus:ring-2 focus:ring-accent-500 text-center"
+                                className="flex-1 py-1.5 bg-linear-to-r from-accent-500 to-accent-700 border-transparent text-sm"
+                                fillClass="bg-accent-300"
+                                textClass="text-white"
+                                variant="solid"
                             >
                                 <Icon name="person-add" className="w-4 h-4 inline-block align-sub mr-1" ariaLabel="Person Add Icon" />
                                 Contact
-                            </a>
-                            <a
+                            </VariantButton>
+                            <VariantButton
                                 href="/Elliott_Schmechel_Resume.pdf"
                                 rel="noopener noreferrer"
-                                className="flex-1 py-1.5 bg-linear-to-r from-accent-500 to-accent-700 text-white rounded-md text-sm font-medium hover:bg-accent-600 transition-colors focus:outline-none focus:ring-2 focus:ring-accent-500 text-center"
+                                className="flex-1 py-1.5 bg-linear-to-r from-accent-500 to-accent-700 border-transparent text-sm"
+                                fillClass="bg-accent-300"
+                                textClass="text-white"
+                                variant="solid"
                             >
                                 <Icon name="file-download" className="w-4 h-4 inline-block align-sub mr-1" ariaLabel="File Download Icon" />
                                 Resume
-                            </a>
+                            </VariantButton>
                         </div>
                     </div>
                 </div>
