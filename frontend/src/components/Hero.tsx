@@ -1,4 +1,4 @@
-import { Display, Muted } from '@/components/Typographies'
+import { Display, BodyLarge, Muted } from '@/components/Typographies'
 import Icon from '@/components/ui/Icon'
 import VariantButton from '@/components/ui/VariantButton'
 
@@ -11,13 +11,13 @@ export default function Hero() {
 
             <div id="heroSubHeader" className="flex flex-col sm:flex-row items-center justify-center gap-1.5 text-center">
                 <div className="flex items-center gap-1.5">
-                    <Icon name="briefcase" className="w-8 h-8 text-accent-50" ariaLabel="Briefcase" />
+                    <Icon name="briefcase" className="w-6 h-6 text-accent-50" ariaLabel="Briefcase" />
                     <Muted className="text-xl">
                         Software Engineer
                     </Muted>
                 </div>
                 <div className="flex items-center gap-0.5">
-                    <Icon name="map-marker" className="w-8 h-8 text-accent-50" ariaLabel="Map Marker" />
+                    <Icon name="map-marker" className="w-6 h-6 text-accent-50" ariaLabel="Map Marker" />
                     <Muted className="text-xl">
                         Vancouver, BC
                     </Muted>
@@ -45,7 +45,7 @@ export default function Hero() {
                 </VariantButton>
             </div>
 
-            <div id="heroSocials" className="flex justify-center mt-6 gap-6">
+            <div id="heroSocials" className="flex justify-center mt-10 gap-6">
                 <a href="https://www.github.com/eschmechel" target="_blank" rel="noopener noreferrer">
                     <Icon name="github" className="w-12 h-12 pt-1 text-accent-50" ariaLabel="GitHub icon" />
                 </a>
@@ -58,6 +58,13 @@ export default function Hero() {
                 <a href="https://blueskyweb.xyz/eschmechel" target="_blank" rel="noopener noreferrer">
                     <Icon name="bluesky" className="w-12 h-12 pt-1 text-accent-50" ariaLabel="Bluesky icon" />
                 </a>
+            </div>
+
+            <div id="heroDescription" className="flex justify-center mt-24 px-4 max-md:text-center">
+                <BodyLarge className="items-center max-w-5xl ">
+                    I am a curious software engineer with a focus on producing cohesive, accessible, and performant solutions. 
+                    I enjoy a variety of fields, from full-stack web applications, to low-level reverse enigineering, to cloud infrastructure.
+                </BodyLarge>
             </div>
         </div>
     );
