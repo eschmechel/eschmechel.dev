@@ -1,10 +1,12 @@
 import './App.css'
 import Hero from '@/components/Hero'
+import NavBar from '@/components/NavBar'
 
 
 function App() {
   return (
-    <div className="max-w-640 mx-auto p-4">
+    <div className="max-w-480 mx-auto">
+      <NavBar/>
       <Hero />
     </div>
   )
