@@ -1,103 +1,82 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
+import { ActivityCalendar } from 'react-activity-calendar'
+import '../../styles/github-activity-tooltip.css'
 
-const username: string = "eschmechel";
-const currentYear: number = new Date().getFullYear();
-const lastYear: number = currentYear - 1;
+interface ContributionDay { date: string; count: number; level: number }
 
-const dateRange = `${lastYear}..${currentYear}`;
+const MARGIN = 3
+const formatDate = (iso: string) => new Date(iso).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })
+const calcLevel = (count: number) => count ? Math.min(Math.ceil(count / 3), 4) : 0
 
-export default function GithubChart(){
-    const [contributionCount, setContributionCount] = useState<string>("Loading...");
+const fetchContributions = async (username: string, token: string) => {
+    const from = new Date(); from.setDate(from.getDate() - 365)
+    const res = await fetch("https://api.github.com/graphql", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ query: `{ user(login: "${username}") { contributionsCollection(from: "${from.toISOString()}", to: "${new Date().toISOString()}") { contributionCalendar { weeks { contributionDays { date contributionCount } } } } } }` })
+    })
+    const { data, errors } = await res.json()
+    if (errors || !data?.user?.contributionsCollection?.contributionCalendar?.weeks) throw new Error(errors ? JSON.stringify(errors) : "Unexpected format")
+    return data.user.contributionsCollection.contributionCalendar.weeks.flatMap((w: any) => 
+        w.contributionDays.map((d: any) => ({ date: d.date, count: d.contributionCount, level: calcLevel(d.contributionCount) }))
+    )
+}
+
+export default function GithubChart({ username = 'eschmechel' }: { username?: string }) {
+    const [data, setData] = useState<ContributionDay[]>([])
+    const [loading, setLoading] = useState(true)
+    const [blockSize, setBlockSize] = useState(12)
+    const containerRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
-        async function fetchGitHubContributions() {
-            try {
-                const token = import.meta.env.VITE_GITHUB_TOKEN;
-                if (!token) {
-                    console.warn("GitHub token not found. Set VITE_GITHUB_TOKEN in .env");
-                    setContributionCount("Unknown");
-                    return;
-                }
+        const token = import.meta.env.VITE_GITHUB_TOKEN
+        if (!token) { console.warn("VITE_GITHUB_TOKEN not set"); setLoading(false); return }
+        fetchContributions(username, token).then(setData).catch(console.error).finally(() => setLoading(false))
+    }, [username])
 
-                const response = await fetch("https://api.github.com/graphql", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${token}`
-                    },
-                    body: JSON.stringify({
-                        query: `
-                        {
-                            user(login: "${username}") {
-                                contributionsCollection(from: "${lastYear}-01-01T00:00:00Z", to: "${currentYear}-01-01T00:00:00Z") {
-                                    contributionCalendar {
-                                        totalContributions
-                                    }
-                                }
-                            }
-                        }
-                        `
-                    })
-                });
+    useEffect(() => {
+        if (!containerRef.current) return
+        const ro = new ResizeObserver(([e]) => {
+            const size = Math.floor((e.contentRect.width - 60 - 52 * MARGIN) / 53)
+            setBlockSize(Math.max(4, Math.min(12, size)))
+        })
+        ro.observe(containerRef.current)
+        return () => ro.disconnect()
+    }, [])
 
-                const data = await response.json();
-                
-                if (data.errors) {
-                    console.error("GitHub API errors:", data.errors);
-                    setContributionCount("Unknown");
-                    return;
-                }
+    const total = data.reduce((s, d) => s + d.count, 0)
 
-                if (!data.data?.user?.contributionsCollection?.contributionCalendar?.totalContributions) {
-                    console.error("Unexpected response format:", data);
-                    setContributionCount("Unknown");
-                    return;
-                }
-
-                setContributionCount(data.data.user.contributionsCollection.contributionCalendar.totalContributions.toString());
-            } catch (error){
-                console.error("Failed to fetch GitHub contributions:", error);
-                setContributionCount("Unknown");
-            }
-        }
-
-        fetchGitHubContributions();
-    }, []);
+    if (loading) return (
+        <div id="githubChart" className="flex flex-col gap-4 max-w-4xl mx-auto my-8 px-4">
+            <div className="text-center text-text-muted">Loading contributions...</div>
+        </div>
+    )
 
     return (
         <div id="githubChart" className="flex flex-col gap-4 max-w-4xl mx-auto my-8 px-4">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 text-xs text-text-muted">
-                {dateRange} • {contributionCount} contributions
-            </div>
-            <a
-            target="_blank"
-            rel="noopener noreferrer"
-            href="https://github.com/eschmechel"
-            className="block hover:brightness-105 transition-transform duration-200"
-            >
-                <img
-                src={`https://ghchart.rshah.org/3B82F6/${username}`}
-                loading="lazy"
-                alt={`GitHub Contribution Chart - ${contributionCount} contributions`}
-                className="w-full h-auto rounded-lg"
+            <div className="text-xs text-text-muted">Last 365 days • {total} contributions</div>
+            <div ref={containerRef} className="overflow-hidden w-full">
+                <ActivityCalendar
+                    data={data}
+                    theme={{ dark: ['#161b22', '#1e3a8a', '#2563eb', '#3b82f6', '#60a5fa'] }}
+                    colorScheme="dark"
+                    blockSize={blockSize}
+                    blockMargin={MARGIN}
+                    fontSize={12}
+                    showWeekdayLabels
+                    tooltips={{
+                        activity: { text: (a: any) => `${a.count} contributions on ${formatDate(a.date)}` },
+                        colorLegend: { text: (l: number) => `Activity level ${l + 1}` }
+                    }}
+                    labels={{
+                        months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan'],
+                        weekdays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+                    }}
+                    renderBlock={(block, a) => (
+                        <a href={`https://github.com/${username}?tab=overview&from=${a.date}&to=${a.date}`} target="_blank" rel="noopener noreferrer">{block}</a>
+                    )}
                 />
-            </a>
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
-                <div className="flex items-center gap-2 text-sm text-text-muted">
-                    <span className="text-text font-semibold">{contributionCount}</span> contributions in the last year
-                </div>
-
-                <div className="flex items-center gap-2 text-xs text-text-muted">
-                    <span>Less</span>
-                    <div className="flex gap-1">
-                        <div className="w-3 h-3 bg-[#60a5fa] rounded-sm"></div>
-                        <div className="w-3 h-3 bg-[#3b82f6] rounded-sm"></div>
-                        <div className="w-3 h-3 bg-[#2563eb] rounded-sm"></div>
-                        <div className="w-3 h-3 bg-[#1e3a5f] rounded-sm"></div>
-                    </div>
-                    <span>More</span>
-                </div>
             </div>
         </div>
-    );
+    )
 }
