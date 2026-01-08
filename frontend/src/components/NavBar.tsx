@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react'
 import VariantButton from "@/components/ui/VariantButton"
+import Contact from "@/components/ui/Contact"
 
 export default function NavBar(){
     const [isVisible, setIsVisible] = useState(true)
     const [isAtTop, setIsAtTop] = useState(true)
     const [lastScrollY, setLastScrollY] = useState(0)
     const [scrollTimeout, setScrollTimeout] = useState<number | null>(null)
+    const [isContactOpen, setIsContactOpen] = useState(false)
 
     useEffect(() => {
         const handleScroll = () => {
@@ -41,15 +43,25 @@ export default function NavBar(){
     }, [lastScrollY, scrollTimeout])
 
     return (
-        <div id="navBar" className={`max-w-7xl mx-auto sticky top-0 z-50 transition-transform duration-700 ${isVisible ? 'translate-y-0' : '-translate-y-full'}`}>
-            <div className={`backdrop-blur-md bg-bg/80 content-center flex flex-row justify-center py-2 font-medium text-xl text-text ${isAtTop ? '' : 'border-b border-border'}`}>
-                <nav className={`flex flex-row justify-center gap-4 w-full max-w-480`}>
-                    <VariantButton href="#contacts" className="bg-transparent border-transparent" fillClass="bg-accent-500" variant="ghost">Contact</VariantButton>
-                    <VariantButton href="#workExperience" className="bg-transparent border-transparent" fillClass="bg-accent-500" variant="transparent">Work</VariantButton>
-                    <VariantButton href="#projectsSection" className="bg-transparent border-transparent" fillClass="bg-accent-500" variant="ghost">Projects</VariantButton>
-                    <VariantButton href="#aboutMeSection" className="bg-transparent border-transparent" fillClass="bg-accent-500" variant="ghost">About</VariantButton>
-                </nav>
+        <>
+            <div id="navBar" className={`max-w-7xl mx-auto sticky top-0 z-50 transition-transform duration-700 ${isVisible ? 'translate-y-0' : '-translate-y-full'}`}>
+                <div className={`backdrop-blur-md bg-bg/80 content-center flex flex-row justify-center py-2 font-medium text-xl text-text ${isAtTop ? '' : 'border-b border-border'}`}>
+                    <nav className={`flex flex-row justify-center gap-4 w-full max-w-480`}>
+                        <VariantButton 
+                            onClick={() => setIsContactOpen(true)} 
+                            className="bg-transparent border-transparent" 
+                            fillClass="bg-accent-500" 
+                            variant="ghost"
+                        >
+                            Contact
+                        </VariantButton>
+                        <VariantButton href="#workExperience" className="bg-transparent border-transparent" fillClass="bg-accent-500" variant="transparent">Work</VariantButton>
+                        <VariantButton href="#projectsSection" className="bg-transparent border-transparent" fillClass="bg-accent-500" variant="ghost">Projects</VariantButton>
+                        <VariantButton href="#aboutMeSection" className="bg-transparent border-transparent" fillClass="bg-accent-500" variant="ghost">About</VariantButton>
+                    </nav>
+                </div>
             </div>
-        </div>
+            <Contact isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
+        </>
     );
 }
