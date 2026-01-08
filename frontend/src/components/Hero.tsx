@@ -3,6 +3,17 @@ import Icon from '@/components/ui/Icon'
 import VariantButton from '@/components/ui/VariantButton'
 
 export default function Hero() {
+    const handleResumeClick = (e: React.MouseEvent) => {
+        e.preventDefault()
+        const link = document.createElement('a')
+        link.href = '/Elliott_Schmechel_Resume.pdf'
+        link.download = 'Elliott_Schmechel_Resume.pdf'
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+        setTimeout(() => window.location.hash = '', 100)
+    }
+
     return (
         <div className="max-w-7xl flex flex-col justify-center mx-auto">
             <Display id="heroHeader" className="text-center mt-10 mb-4">
@@ -26,20 +37,12 @@ export default function Hero() {
 
             <div id = "contacts" className="flex justify-center mt-10 gap-3">
                 <VariantButton
-                    className="bg-accent-500 py-2 px-4 font-medium text-lg"
-                    variant="highlight"
-                    fillClass="bg-linear-to-r from-accent-500 to-accent-700"
-                    textClass="text-white"
-                    href="mailto:elliottschmechel@gmail.com">
-                        Contact Me
-                </VariantButton>
-                <VariantButton
-                    className="border-border py-2 px-8 font-medium text-lg"
+                    className="border-border py-3 px-12 font-medium text-xl"
                     fillClass="bg-surface"
                     variant="transparent"
                     textClass="text-text"
                     href="/Elliott_Schmechel_Resume.pdf"
-                    // target="_blank"  currently dont know if this is useful until resume is uploaded
+                    onClick={handleResumeClick}
                     rel="noopener noreferrer">
                         Resume
                 </VariantButton>
