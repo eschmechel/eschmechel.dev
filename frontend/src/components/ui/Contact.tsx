@@ -37,10 +37,10 @@ export default function Contact({ isOpen, onClose }: ContactProps) {
     if (!isOpen) return null
 
     return (
-        <div className="fixed inset-0 z-100 flex items-center justify-center animate-in fade-in duration-300" onClick={onClose}>
-            <div className="absolute inset-0 bg-black/60" />
+        <div className="fixed inset-0 z-100 flex items-center justify-center animate-in fade-in duration-600" onClick={onClose}>
+            <div className="absolute inset-0 bg-black/50" />
             <div 
-                className="relative backdrop-blur-md bg-surface/90 border-2 border-accent-700 rounded-lg p-8 max-w-md w-full mx-4 shadow-2xl animate-in zoom-in-95 slide-in-from-bottom-4 duration-300"
+                className="relative backdrop-blur-xs bg-surface/25 border-2 border-accent-700 rounded-lg p-8 max-w-md w-full mx-4 shadow-2xl animate-in zoom-in-95 slide-in-from-bottom-4 duration-600"
                 onClick={(e) => e.stopPropagation()}
             >
                 <button

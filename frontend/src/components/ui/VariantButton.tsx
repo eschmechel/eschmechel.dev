@@ -39,8 +39,8 @@ function getVariantClasses(variant: Variant): ClassName {
 
 function getFillSpanClass(fillClass: CSSClass): ClassName {
   return cn(
-    'absolute inset-0 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out',
-    'group-hover:brightness-105',
+    'absolute inset-0 transform origin-left scale-x-0 group-hover/button:scale-x-100 transition-transform duration-300 ease-out',
+    'group-hover/button:brightness-105',
     fillClass
   )
 }
@@ -48,7 +48,7 @@ function getFillSpanClass(fillClass: CSSClass): ClassName {
 function getGlowSpanClass(variant: Variant, fillClass: CSSClass): ClassName | undefined {
   if (variant !== 'highlight') return undefined
   return cn(
-    'absolute -inset-2 rounded-md blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none',
+    'absolute -inset-2 rounded-md blur-xl opacity-0 group-hover/button:opacity-100 transition-opacity duration-300 pointer-events-none',
     fillClass
   )
 }
@@ -107,9 +107,9 @@ const VariantButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPr
   const glowSpanClass = getGlowSpanClass(variant, fillClass)
   const contentClass = cn('relative z-10', textClass)
   const handleClick = createScrollHandler(scrollToHash, onHashClick)
-  const commonClass = cn('group', base, variantClasses, className)
+  const commonClass = cn('group/button', base, variantClasses, className)
   const as = getElementType(href, scrollToHash)
-  const finalClass = as === 'button' ? commonClass : cn('group inline-block', base, variantClasses, className)
+  const finalClass = as === 'button' ? commonClass : cn('group/button inline-block', base, variantClasses, className)
 
   return (
     <Button as={as} href={href} onClick={handleClick as any} className={finalClass} disabled={disabled} target={target} rel={rel} {...rest}>
