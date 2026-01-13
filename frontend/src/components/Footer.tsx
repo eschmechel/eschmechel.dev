@@ -106,7 +106,7 @@ export default function Footer(){
             </div>
             
             <div id="footerLowerSection" className="flex justify-center mt-4">
-                
+                <p className="text-sm text-text-muted">Elliott Schmechel © 2026</p>
             </div>
         </footer>
     );
