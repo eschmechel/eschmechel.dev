@@ -64,6 +64,7 @@ export const experiences: Experience[] = [
     description:
       'Developed Mapd, an innovative web application that leverages AI to assist researchs and the general public on impact that building permits will have on local communities and the surronding ammenities in the city of Vancouver. I worked on the fullstack development, bouncing from frontend design of the homepage to helping co-create the backend architecture using FASTAPI and Cloudflare Workers.',
     projectUrl: 'https://mapd.tech',
+    githubUrl: 'https://github.com/LMSAIH/StormHacks2025'
   },
   {
     type: 'project',
