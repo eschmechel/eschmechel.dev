@@ -21,16 +21,21 @@ export default function Contact({ isOpen, onClose }: ContactProps) {
     }, [])
 
     useEffect(() => {
+        const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth
+        document.documentElement.style.setProperty('--scrollbar-width', `${scrollbarWidth}px`)
+
         const handleEscape = (e: KeyboardEvent) => {
             if (e.key === 'Escape') onClose()
         }
         if (isOpen) {
             document.addEventListener('keydown', handleEscape)
             document.body.style.overflow = 'hidden'
+            document.body.style.paddingRight = 'var(--scrollbar-width)'
         }
         return () => {
             document.removeEventListener('keydown', handleEscape)
             document.body.style.overflow = 'unset'
+            document.body.style.paddingRight = 'unset'
         }
     }, [isOpen, onClose])
 
