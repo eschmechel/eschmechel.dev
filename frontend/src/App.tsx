@@ -1,9 +1,10 @@
 import '@/App.css'
 import NavBar from '@/components/NavBar'
 import Hero from '@/components/Hero'
+import TechStack from '@/components/TechStack'
 import Experience from '@/components/Experience'
-import About from '@/components/About'
 import Footer from '@/components/Footer'
+
 
 
 
@@ -12,8 +13,8 @@ function App() {
     <div className="max-w-480 mx-auto min-h-screen">
       <NavBar/>
       <Hero />
+      <TechStack />
       <Experience />
-      <About />
       <Footer />
     </div>
   )

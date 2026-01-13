@@ -20,7 +20,7 @@ export default function Footer(){
         <footer className="max-w-7xl mx-auto border-t-2 border-accent-700 pt-6 pb-4">
             <div id="footerUpperSection" className="flex flex-row mx-8 max-sm:gap-4 justify-evenly">
                 <div id ="footerContactMe" className="flex flex-col mr-auto max-w-65">
-                    <H4 className="text-lg bg-linear-to-r from-accent-300 to-accent-700 bg-clip-text text-transparent mb-4">
+                    <H4 className="text-lg text-text mb-4">
                         Let's Connect
                     </H4>
                     <Body className="text-accent-50 mb-4">
@@ -77,7 +77,7 @@ export default function Footer(){
                 </div>
 
                 <nav id="footerNavLinks" className="flex flex-col gap-6 ml-auto text-xl max-w-65 items-end">
-                    <H4 className="bg-linear-to-r from-accent-300 to-accent-700 bg-clip-text text-transparent text-xl" aria-label="Footer Navigation Section">Navigation</H4>
+                    <H4 className="text-xl text-text" aria-label="Footer Navigation Section">Navigation</H4>
                     <HashLink to="#contacts" className="" aria-label="Contact Link">
                         <Link>Contacts</Link>
                     </HashLink>

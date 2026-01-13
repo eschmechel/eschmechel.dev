@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import VariantButton from "@/components/ui/VariantButton"
 import Contact from "@/components/ui/Contact"
+import scrollToHash from '@/utils/scrollToHash'
 
 export default function NavBar(){
     const [isVisible, setIsVisible] = useState(true)
@@ -47,17 +48,50 @@ export default function NavBar(){
             <div id="navBar" className={`max-w-7xl mx-auto sticky top-0 z-50 transition-transform duration-700 ${isVisible ? 'translate-y-0' : '-translate-y-full'}`}>
                 <div className={`backdrop-blur-md bg-bg/80 content-center flex flex-row justify-center py-2 font-medium text-xl text-text ${isAtTop ? '' : 'border-b border-border'}`}>
                     <nav className={`flex flex-row justify-center gap-4 w-full max-w-480`}>
-                        <VariantButton 
-                            onClick={() => setIsContactOpen(true)} 
-                            className="bg-transparent border-transparent" 
-                            fillClass="bg-accent-500" 
+                        <VariantButton
+                            onClick={() => setIsContactOpen(true)}
+                            className="bg-transparent border-transparent"
+                            fillClass="bg-accent-500"
                             variant="ghost"
                         >
                             Contact
                         </VariantButton>
-                        <VariantButton href="#workExperience" className="bg-transparent border-transparent" fillClass="bg-accent-500" variant="transparent">Work</VariantButton>
-                        <VariantButton href="#projectsSection" className="bg-transparent border-transparent" fillClass="bg-accent-500" variant="ghost">Projects</VariantButton>
-                        <VariantButton href="#aboutMeSection" className="bg-transparent border-transparent" fillClass="bg-accent-500" variant="ghost">About</VariantButton>
+                        <VariantButton
+                            href="#techStack"
+                            className="bg-transparent border-transparent"
+                            fillClass="bg-accent-500"
+                            variant="ghost"
+                            onClick={(e) => {
+                                e.preventDefault()
+                                scrollToHash('#techStack', { offset: 80 })
+                            }}
+                        >
+                            Skills
+                        </VariantButton>
+                        <VariantButton
+                            href="#work"
+                            className="bg-transparent border-transparent"
+                            fillClass="bg-accent-500"
+                            variant="ghost"
+                            onClick={(e) => {
+                                e.preventDefault()
+                                scrollToHash('#work', { offset: 80 })
+                            }}
+                        >
+                            Work
+                        </VariantButton>
+                        <VariantButton
+                            href="#projectSection"
+                            className="bg-transparent border-transparent"
+                            fillClass="bg-accent-500"
+                            variant="ghost"
+                            onClick={(e) => {
+                                e.preventDefault()
+                                scrollToHash('#projectSection', { offset: 80 })
+                            }}
+                        >
+                            Projects
+                        </VariantButton>
                     </nav>
                 </div>
             </div>
