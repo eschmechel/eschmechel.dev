@@ -61,7 +61,7 @@ export default function ExperiencePill(props: experienceProps){
                 <div className="flex gap-3 items-center">
                     <img src={props.iconLocation} alt={`${props.company || 'Experience'} logo`} className="w-16 h-16 rounded-2xl object-contain shrink-0"/>
                     
-                    <div className="flex-1">
+                    <div className="flex-1 pr-16 md:pr-0">
                         {props.role && <H4 className="">{props.role}</H4>}
 
                         {props.company && <Label className="">{props.company}</Label>}
