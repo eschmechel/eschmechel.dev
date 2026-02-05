@@ -43,7 +43,18 @@ export const experiences: Experience[] = [
     description:
       'Conducted comprehensive testing of game features and updates to identify bugs and ensure optimal performance. Collaborated with development teams to provide feedback and improve game quality.',
     projectUrl: 'https://www.riotgames.com/en/playtest',
- },
+  },
+  {
+    type: 'project',
+    title: 'Learn-LM',
+    subTitle: 'SystemHacks2026 Winner - Best use of SFUCoursesAPI',
+    iconLocation: '/learnlm-logo.png',
+    startDate: new Date(2026,1),
+      description:
+      `Contributed frontend and infrastructure improvements to LearnLM, an AI-powered study assistant that integrates with the SFU Courses API to generate study materials and practice questions. I enhanced the notes editor (markdown import/export, AI-block controls), stabilized voice/AI features (ElevenLabs integration, voice previews, Deepgram/TTS fixes), and implemented an MCP-based Cloudflare AI gateway with response caching for cost-effective model access. Added CI/CD pipelines and rate limiting to improve reliability under load.`,
+    githubUrl: 'https://github.com/LMSAIH/xhacks2026',
+    projectUrl: 'https://learn-lm.com',
+  },
   {
     type: 'project',
     title: 'Beepd',
