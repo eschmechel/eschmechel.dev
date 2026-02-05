@@ -63,10 +63,10 @@ export default function Hero() {
                 </a>
             </div>
 
-            <div id="heroDescription" className="flex justify-center mt-24 px-4 max-md:text-center">
+            <div id="heroDescription" className="flex justify-center mt-24 px-4 text-center">
                 <BodyLarge className="items-center max-w-5xl ">
-                    I am a curious software engineer with a focus on producing cohesive, accessible, and performant solutions. 
-                    I enjoy a variety of fields, from full-stack web applications, to low-level reverse enigineering, to cloud infrastructure.
+                    I am software engineer with a focus on producing cohesive, accessible, and performant solutions. 
+                    I enjoy a variety of fields, from full-stack web applications, to reverse enigineering, up-to cloud infra and AI.
                 </BodyLarge>
             </div>
         </div>
