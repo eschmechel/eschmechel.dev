@@ -81,16 +81,16 @@ export default function Footer(){
                     <HashLink to="#contacts" className="" aria-label="Contact Link">
                         <Link>Contacts</Link>
                     </HashLink>
-                    <HashLink to="#workExperience" className="" aria-label="Work Experience Link">
+                    <HashLink to="#work" className="" aria-label="Work Experience Link">
                         <Link>
                             <span className="max-sm:hidden">Work Experience</span>
                             <span className="sm:hidden">Work</span>
                         </Link>
                     </HashLink>
-                    <HashLink to="#projectsSection" className="" aria-label="Projects Link">
+                    <HashLink to="#projectSection" className="" aria-label="Projects Link">
                         <Link>Projects</Link>
                     </HashLink>
-                    <HashLink to="#aboutMeSection" className="" aria-label="About Me Link">
+                    <HashLink to="#heroDescription" className="" aria-label="About Me Link">
                         <Link>
                             <span className="max-sm:hidden">About Me</span>
                             <span className="sm:hidden">About</span>

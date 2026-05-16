@@ -25,18 +25,20 @@ const techCategories: TechCategory[] = [
       { name: 'Python', url: 'https://www.python.org' },
       { name: 'Express', url: 'https://expressjs.com' },
       { name: 'Redis', url: 'https://redis.io' },
-      { name: 'MongoDB', url: 'https://www.mongodb.com' },
-      { name: 'FastAPI', url: 'https://fastapi.tiangolo.com' }
+      { name: 'FastAPI', url: 'https://fastapi.tiangolo.com' },
+      { name: 'Go', url: 'https://go.dev' },
+      { name: 'Rust', url: 'https://www.rust-lang.org' },
+      { name: 'PostgreSQL', url: 'https://www.postgresql.org' }
     ]
   },
   {
     name: 'AI',
     technologies: [
-      { name: 'Ollama', url: 'https://ollama.com' },
-      { name: 'C++', url: 'https://isocpp.org' },
-      { name: 'Python', url: 'https://www.python.org' },
+      { name: 'Ollama', url: 'https://ollama.ai' },
       { name: 'PyTorch', url: 'https://pytorch.org' },
-      { name: 'HuggingFace', url: 'https://huggingface.co' }
+      { name: 'HuggingFace', url: 'https://huggingface.co' },
+      { name: 'RAG', url: 'https://docs.llamaindex.ai/en/stable/' },
+      { name: 'MCP', url: 'https://modelcontextprotocol.io' }
     ]
   },
   {
@@ -70,12 +72,15 @@ const techLogos: Record<string, string> = {
   'Git': '/tech-icons/git.svg',
   'Bash': '/tech-icons/gnubash.svg',
   'Redis': '/tech-icons/redis.svg',
-  'MongoDB': '/tech-icons/mongodb.svg',
   'FastAPI': '/tech-icons/fastapi.svg',
+  'Go': '/tech-icons/go.svg',
+  'Rust': '/tech-icons/rust.svg',
+  'PostgreSQL': '/tech-icons/postgresql.svg',
   'Ollama': '/tech-icons/ollama.svg',
-  'C++': '/tech-icons/cplusplus.svg',
   'PyTorch': '/tech-icons/pytorch.svg',
   'HuggingFace': '/tech-icons/huggingface.svg',
+  'RAG': '/blank.svg',
+  'MCP': '/blank.svg',
   'Linux': '/tech-icons/linux.svg',
   'CMake': '/tech-icons/cmake.svg'
 }

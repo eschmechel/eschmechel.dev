@@ -13,13 +13,22 @@ export interface Experience {
 export const experiences: Experience[] = [
   {
     type: "work",
+    title: "Volunteer",
+    subTitle: "Web Summit Vancouver 2026",
+    iconLocation: "/websummit-logo.png",
+    startDate: new Date(2026, 4),
+    description:
+      "Supported event operations at Web Summit Vancouver 2026 across registration, data analytics, and attendee response and support.",
+  },
+  {
+    type: "work",
     title: "Volunteer Fullstack Developer",
     subTitle: "United Nations Association of Canada - Vancouver",
     iconLocation: "/unac-v.webp",
     startDate: new Date(2025, 9),
     endDate: "Present",
     description:
-      "I contribute to the development and maintenance of the new UNAC-Vancouver website, translating figma designs into modern react components as well as leveraging cloudflare pages for CI/CD integration and hosting.",
+      "Building and maintaining the UNAC-Vancouver website as a fullstack developer — translating Figma designs into responsive React components, implementing Cloudflare Pages CI/CD for automated deployments, and managing content updates.",
     projectUrl: "https://unacvancouver.org",
   },
   {
@@ -30,7 +39,7 @@ export const experiences: Experience[] = [
     startDate: new Date(2025, 6),
     endDate: new Date(2025, 11),
     description:
-      "Developed and maintained the Langara French Club website using React and TypeScript to update content. Configured and managed IT systems, including email forwarding, mailing lists, and shared Office 365 tools.",
+      "Developed and maintained the Langara French Club website using React and TypeScript. Managed IT infrastructure including email forwarding, mailing lists, and Microsoft 365 tools.",
     projectUrl: "https://langarafr.com",
   },
   {
@@ -41,8 +50,18 @@ export const experiences: Experience[] = [
     startDate: new Date(2024, 8),
     endDate: new Date(2025, 0),
     description:
-      "Conducted comprehensive testing of game features and updates to identify bugs and ensure optimal performance. Collaborated with development teams to provide feedback and improve game quality.",
+      "Tested game features and updates to identify bugs and performance regressions before release. Collaborated with dev teams to triage and document issues in the bug tracking pipeline.",
     projectUrl: "https://www.riotgames.com/en/playtest",
+  },
+  {
+    type: "project",
+    title: "OpenCode Extension Stack",
+    subTitle: "Multi-package orchestration system for AI agent workflows",
+    iconLocation: "/opencode-logo.svg",
+    startDate: new Date(2026, 3),
+    description:
+      "Built an OpenCode-first extension stack for unattended jobs, worker orchestration, persistent skeptical memory, prompt packs, and a remote bridge. Architected a monorepo spanning six packages — core, scheduler, orchestrator, memory, packs, and bridge — with CLI entry points, local state management, cron scheduling, and Telegram integration for remote approval flows.",
+    githubUrl: "https://github.com/eschmechel/opencode-extension-stack",
   },
   {
     type: "project",
@@ -77,6 +96,16 @@ export const experiences: Experience[] = [
   },
   {
     type: "project",
+    title: "DNS Server",
+    subTitle: "C++ DNS server with recursive resolution",
+    iconLocation: "/blank.svg",
+    startDate: new Date(2025, 10),
+    description:
+      "Implemented a DNS server in C++ from scratch, handling packet parsing, recursive resolution, and A/AAAA/CNAME/MX/NS record types. Built to understand networking and systems programming — reading RFC 1035 and implementing the wire protocol piece by piece.",
+    githubUrl: "https://github.com/eschmechel/codecrafters-dns-server-cpp",
+  },
+  {
+    type: "project",
     title: "Mapd",
     subTitle:
       "StormHacks 2025 Winner - Finalist, Best Design, 2nd Place UN SDG Enactus",
@@ -107,7 +136,7 @@ export const experiences: Experience[] = [
     startDate: new Date(2025, 6),
     endDate: new Date(2025, 9),
     description:
-      "Developed Langara Scheduler, a web application designed to help Langara College students efficiently plan their academic schedules. I was the primary lead for scraping BCTransferGuide and implementing schema and transfer architecture to support queries utilizing TypeScript.",
+      "Developed a course scheduling web app for Langara College students. Led the scraping pipeline against BCTransferGuide and designed the transfer credit schema and query architecture using TypeScript.",
     githubUrl: "https://github.com/LMSAIH/LangaraScraper",
   },
   {
@@ -117,7 +146,7 @@ export const experiences: Experience[] = [
     iconLocation: "/homelab.svg",
     startDate: new Date(2025, 5),
     description:
-      "Designed and implemented a personal homelab environment to explore and experiment with various technologies including virtualization, containerization, load-balancing, and network management. Utilized tools such as Proxmox, Docker, and Kubernetes to create a versatile and scalable infrastructure for learning and development.",
+      "Built and maintains a personal homelab running Proxmox, Docker, and Kubernetes for infrastructure experimentation. Developed an Obsidian MCP server in Go and a monitoring/notification stack for the homelab environment.",
   },
   {
     type: "education",
@@ -125,7 +154,7 @@ export const experiences: Experience[] = [
     subTitle: "Langara College",
     iconLocation: "/langara.png",
     startDate: new Date(2024, 8),
-    endDate: new Date(2026, 7),
+    endDate: "Present",
     projectUrl: "https://langara.ca",
     description:
       "Relevant Coursework: Data Structures and Algorithms, Intro to Logic, Unix Tools & Scripting, Discrete Mathematics, Object-Oriented Programming, Networking.",
