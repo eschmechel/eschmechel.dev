@@ -28,7 +28,7 @@ export const experiences: Experience[] = [
     startDate: new Date(2025, 9),
     endDate: "Present",
     description:
-      "Building and maintaining the UNAC-Vancouver website as a fullstack developer — translating Figma designs into responsive React components, implementing Cloudflare Pages CI/CD for automated deployments, and managing content updates.",
+      "Contributed to the UNAC-Vancouver website as a fullstack developer. Translated Figma designs into responsive React components, set up Cloudflare Pages CI/CD for automated deployments, and managed content updates.",
     projectUrl: "https://unacvancouver.org",
   },
   {
@@ -59,7 +59,7 @@ export const experiences: Experience[] = [
     iconLocation: "/opencode-logo.svg",
     startDate: new Date(2026, 3),
     description:
-      "Built an OpenCode-first extension stack for unattended jobs, worker orchestration, persistent skeptical memory, prompt packs, and a remote bridge. Architected a monorepo spanning six packages — core, scheduler, orchestrator, memory, packs, and bridge — with CLI entry points, local state management, cron scheduling, and Telegram integration for remote approval flows.",
+      "Built an extension stack for OpenCode that handles cron jobs, worker orchestration, persistent memory, prompt packs, and a remote bridge. The monorepo spans six packages (core, scheduler, orchestrator, memory, packs, bridge) with CLI tools, local state management, and Telegram integration for remote approval flows.",
     githubUrl: "https://github.com/eschmechel/opencode-extension-stack",
   },
   {
@@ -100,7 +100,7 @@ export const experiences: Experience[] = [
     iconLocation: "/blank.svg",
     startDate: new Date(2025, 10),
     description:
-      "Implemented a DNS server in C++ from scratch, handling packet parsing, recursive resolution, and A/AAAA/CNAME/MX/NS record types. Built to understand networking and systems programming — reading RFC 1035 and implementing the wire protocol piece by piece.",
+      "Wrote a DNS server in C++ that parses DNS packets, resolves records recursively, and handles A, AAAA, CNAME, MX, and NS types. Followed RFC 1035 and implemented the wire protocol from scratch.",
     githubUrl: "https://github.com/eschmechel/codecrafters-dns-server-cpp",
   },
   {
