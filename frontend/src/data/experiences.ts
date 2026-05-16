@@ -40,7 +40,6 @@ export const experiences: Experience[] = [
     endDate: new Date(2025, 11),
     description:
       "Developed and maintained the Langara French Club website using React and TypeScript. Managed IT infrastructure including email forwarding, mailing lists, and Microsoft 365 tools.",
-    projectUrl: "https://langarafr.com",
   },
   {
     type: "work",
