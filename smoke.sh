@@ -34,12 +34,18 @@ check "/projects → projects" route /projects projects
 check "/resume → resume" route /resume resume
 check "/blog → blog" route /blog blog
 check "/~ → home" route /~ home
+check "every post page renders (canonical → eschmechel.dev)" bash -c '
+  for slug in $(ls dist/blog | grep -v index.html); do
+    curl -fsL "http://127.0.0.1:'"$PORT"'/blog/$slug" | grep -q "<link rel=\"canonical\" href=\"https://eschmechel.dev/blog/$slug\"" || exit 1
+  done'
+check "rss.xml lists every post" bash -c "[ \$(curl -fs http://127.0.0.1:$PORT/rss.xml | grep -o '<item>' | wc -l) -eq \$(ls dist/blog | grep -vc index.html) ]"
+check "sitemap includes posts" bash -c "grep -q '/blog/your-ai-slop-bores-me/' dist/sitemap-0.xml"
 check "favicon served" curl -fs "http://127.0.0.1:$PORT/favicon.svg"
 check "resume PDF served" bash -c "curl -fsI http://127.0.0.1:$PORT/Elliott-Schmechel-Resume.pdf | grep -qi 'application/pdf'"
 check "project thumbnails optimised" bash -c "ls dist/_astro/*.webp >/dev/null"
 check "banner matches figlet byte-for-byte" node tests/banner.check.mjs
 check "14 KB first-flight budget (gzip, CSS inlined)" node tests/budget.check.mjs
-check "no skill-rating markup (D12)" bash -c "! grep -rEiq '(★|☆|[0-9]+ ?/ ?(5|10)\\b|progress|level)' dist --include=*.html"
+check "no skill-rating markup on column pages (D12)" bash -c "! grep -Eiq '(★|☆|[0-9]+ ?/ ?(5|10)\\b|progress|level)' dist/index.html dist/*/index.html"
 
 echo "smoke: $pass/$total"
 [ "$pass" -eq "$total" ]

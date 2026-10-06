@@ -225,6 +225,45 @@ await check('lightbox: backdrop click closes; single image hides prev/next', asy
   expect(!(await desktop.$eval('#lightbox', (d) => d.open)), 'backdrop click did not close');
 });
 
+await check('blog column lists every post (latest + archive), newest first', async () => {
+  await desktop.goto(BASE + '/blog');
+  const links = await desktop.$$eval('#col-blog a[href^="/blog/"]', (as) => as.map((a) => a.getAttribute('href')));
+  expect(links.length === 5, `posts listed: ${links.length}`);
+  expect(links[0] === '/blog/protect-yourself-mesh-yourself', `newest first: ${links[0]}`);
+});
+
+await check('clicking a post opens its page with canonical + dev.to link', async () => {
+  await desktop.click('#col-blog a[href="/blog/skills-are-prompts-heres-how-hermes-apprentice-turns-them-into-weights"]');
+  await desktop.waitForURL('**/blog/skills-are-prompts-*');
+  const canonical = await desktop.$eval('link[rel=canonical]', (l) => l.href);
+  expect(canonical === 'https://eschmechel.dev/blog/skills-are-prompts-heres-how-hermes-apprentice-turns-them-into-weights', canonical);
+  expect((await desktop.textContent('h1'))?.startsWith('Skills are Prompts'), 'title');
+  expect(await desktop.$('a[href^="https://dev.to/eschmechel/"]'), 'dev.to link');
+  const imgs = await desktop.$$eval('.prose img', (is) => is.map((i) => (i.getAttribute('src') ?? '').startsWith('/_astro/')));
+  expect(imgs.length === 2 && imgs.every(Boolean), `post images local+optimised: ${imgs}`);
+  const gap = await desktop.$eval('.prose > p + p', (e) => parseFloat(getComputedStyle(e).marginTop));
+  expect(gap > 8, `paragraphs run together (margin-top ${gap}px)`);
+});
+
+await check('reader keys: j scrolls, 2 → /projects, Esc → /blog', async () => {
+  await desktop.goto(BASE + '/blog/skills-are-prompts-heres-how-hermes-apprentice-turns-them-into-weights');
+  await desktop.keyboard.press('j');
+  await desktop.keyboard.press('j');
+  await desktop.waitForTimeout(500);
+  expect((await desktop.$eval('#reader', (r) => r.scrollTop)) > 0, 'did not scroll');
+  await desktop.keyboard.press('Escape');
+  await desktop.waitForURL('**/blog');
+  expect((await state(desktop)).col === 'blog', 'esc did not land on the blog column');
+  await desktop.goto(BASE + '/blog/your-ai-slop-bores-me');
+  await desktop.keyboard.press('2');
+  await desktop.waitForURL('**/projects');
+});
+
+await desktop.goto(BASE + '/blog/protect-yourself-mesh-yourself');
+await desktop.waitForTimeout(400);
+await desktop.screenshot({ path: `${OUT}/desktop-1440-post.png` });
+
+await desktop.goto(BASE + '/projects');
 await desktop.click('a[data-lightbox="hermes-apprentice"] >> nth=1');
 await desktop.waitForFunction(() => document.querySelector('#lightbox-img')?.naturalWidth > 0);
 await desktop.screenshot({ path: `${OUT}/desktop-1440-lightbox.png` });

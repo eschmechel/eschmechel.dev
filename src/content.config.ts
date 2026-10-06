@@ -82,4 +82,19 @@ const opinions = defineCollection({
   schema: z.object({ title: z.string(), stub: z.boolean().default(false), ...provenance }),
 });
 
-export const collections = { site, projects, experience, education, skills, now, opinions };
+// Posts are Elliott's own writing (imported from dev.to by scripts/sync-devto.ts), so no
+// provenance flags — eschmechel.dev is canonical, dev.to is the cross-post.
+const blog = defineCollection({
+  loader: glob({ base: './src/content/blog', pattern: '*.md' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    pubDate: z.coerce.date(),
+    updatedDate: z.coerce.date().optional(),
+    tags: z.array(z.string()).default([]),
+    draft: z.boolean().default(false),
+    devto: z.object({ id: z.number(), url: z.url() }).optional(),
+  }),
+});
+
+export const collections = { site, projects, experience, education, skills, now, opinions, blog };

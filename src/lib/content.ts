@@ -25,6 +25,15 @@ export async function getExperience() {
   return (await getCollection('experience')).sort((a, b) => b.data.start.getTime() - a.data.start.getTime());
 }
 
+export async function getPosts() {
+  return (await getCollection('blog', (p) => !p.data.draft)).sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+}
+
+export const fmtDay = (d: Date) => d.toISOString().slice(0, 10);
+
+/** ~230 wpm, code blocks included — close enough for a "5 min" label. */
+export const readingMinutes = (body = '') => Math.max(1, Math.round(body.split(/\s+/).filter(Boolean).length / 230));
+
 // Dates are stored as UTC midnight; format in UTC so a month never slips in western time zones.
 const month = new Intl.DateTimeFormat('en-CA', { month: 'short', year: 'numeric', timeZone: 'UTC' });
 export const fmtMonth = (d: Date) => month.format(d).replace('.', '');

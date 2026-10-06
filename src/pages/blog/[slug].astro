@@ -1,0 +1,102 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Panel from '../../components/Panel.astro';
+import { COLUMNS } from '../../data/columns';
+import { fmtDay, getPosts, readingMinutes } from '../../lib/content';
+import '../../styles/prose.css';
+
+export async function getStaticPaths() {
+  return (await getPosts()).map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const p = post.data;
+const blogIndex = COLUMNS.findIndex((c) => c.id === 'blog');
+---
+
+<Base
+  title={`${p.title} · Elliott Schmechel`}
+  description={p.description}
+  path={`/blog/${post.id}`}
+  active={blogIndex}
+  type="article"
+  keysLeft="[1-5 column · esc/h back to blog]"
+  keysRight="[j/k scroll · g/G top/end]"
+>
+  <main class="reader" id="reader" tabindex="-1">
+    <Panel label={`blog/${post.id}`} as="div" class="post">
+      <time class="post__date" datetime={p.pubDate.toISOString()}>{fmtDay(p.pubDate)}</time>
+      <header>
+        <h1>{p.title}</h1>
+        <p class="post__meta">
+          {readingMinutes(post.body)} min read
+          {p.updatedDate && <> · updated {fmtDay(p.updatedDate)}</>}
+          {p.tags.map((t) => <span>#{t}</span>)}
+        </p>
+      </header>
+      <article class="prose">
+        <Content />
+      </article>
+      <nav class="post__end" aria-label="Post links">
+        <a href="/blog">← all posts</a>
+        {p.devto && <a href={p.devto.url} target="_blank" rel="noopener">also on dev.to ↗</a>}
+      </nav>
+    </Panel>
+  </main>
+
+  <script>
+    import { initReader } from '../../scripts/reader';
+    initReader();
+  </script>
+</Base>
+
+<style>
+  .reader {
+    position: fixed;
+    inset: var(--chrome-top) 0 var(--chrome-bottom) 0;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+    outline: none;
+  }
+  .reader :global(.post) {
+    width: var(--col-w);
+    margin: 0.7rem auto 1.5rem;
+  }
+  .post__date {
+    position: absolute;
+    top: 0;
+    right: 0.75rem;
+    transform: translateY(-55%);
+    padding: 0 0.4rem;
+    background: var(--bg);
+    font-size: var(--fs-sm);
+    line-height: 1;
+    color: var(--fg-dim);
+  }
+  h1 {
+    margin: 0.2rem 0 0.4rem;
+    font-size: 1.25rem;
+    line-height: 1.35;
+    font-weight: 600;
+    color: var(--fg-strong);
+  }
+  .post__meta {
+    font-size: var(--fs-sm);
+    color: var(--fg-dim);
+  }
+  .post__meta span {
+    margin-left: 0.6rem;
+  }
+  .post__end {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-top: 0.9rem;
+    border-top: 1px dashed var(--border);
+    font-size: var(--fs-sm);
+  }
+</style>

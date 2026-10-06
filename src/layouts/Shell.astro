@@ -1,14 +1,6 @@
 ---
-// Latin subset only, two weights: keeps inlined CSS small enough for the 14 KB first flight.
-import '@fontsource/ibm-plex-mono/latin-400.css';
-import '@fontsource/ibm-plex-mono/latin-600.css';
-import plexRegular from '@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2?url';
-import '../styles/tokens.css';
-import '../styles/base.css';
-import { execSync } from 'node:child_process';
 import { COLUMNS, type ColumnId } from '../data/columns';
-import { getProfile, reportUnverified } from '../lib/content';
-import Panel from '../components/Panel.astro';
+import Base from './Base.astro';
 import Whoami from '../components/columns/Whoami.astro';
 import Projects from '../components/columns/Projects.astro';
 import Resume from '../components/columns/Resume.astro';
@@ -23,91 +15,38 @@ const { initial } = Astro.props;
 const index = COLUMNS.findIndex((c) => c.id === initial);
 const column = COLUMNS[index];
 const body = { whoami: Whoami, projects: Projects, resume: Resume, blog: Blog, home: Home };
-
-function commitHash(): string {
-  const sha = import.meta.env.CF_PAGES_COMMIT_SHA ?? process.env.CF_PAGES_COMMIT_SHA;
-  if (sha) return sha.slice(0, 7);
-  try {
-    return execSync('git rev-parse --short HEAD', { stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim();
-  } catch {
-    return 'dev';
-  }
-}
-const commit = commitHash();
-const profile = (await getProfile()).data;
-await reportUnverified();
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{column.title}</title>
-    <meta name="description" content={`${profile.name} — ${profile.headline}`} />
-    <link rel="preload" href={plexRegular} as="font" type="font/woff2" crossorigin />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="canonical" href={new URL(column.href, Astro.site)} />
-  </head>
-  <body>
-    <header class="chrome chrome--top">
-      <Panel label="nav" as="nav">
-        <ul class="nav">
-          {
-            COLUMNS.map((c, i) => (
-              <li>
-                <a href={c.href} data-nav={i} aria-current={i === index ? 'page' : undefined}>
-                  <span class="kbd">[{c.key}] </span>
-                  {c.label}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </Panel>
-    </header>
+<Base title={column.title} path={column.href} active={index} keysLeft="[1-5 column · ←/→ h/l scroll]" keysRight="[↑/↓ j/k panel · esc]">
+  <main class="viewport" id="viewport">
+    <div class="track" id="track" style={`--i:${index}`} data-active={index}>
+      {
+        COLUMNS.map((c, i) => {
+          const Body = body[c.id];
+          return (
+            <section
+              class="column"
+              id={`col-${c.id}`}
+              data-col={i}
+              data-id={c.id}
+              data-href={c.href}
+              data-title={c.title}
+              data-active={String(i === index)}
+              aria-label={c.label}
+              inert={i !== index}
+            >
+              <Body />
+            </section>
+          );
+        })
+      }
+    </div>
+  </main>
 
-    <main class="viewport" id="viewport">
-      <div class="track" id="track" style={`--i:${index}`} data-active={index}>
-        {
-          COLUMNS.map((c, i) => {
-            const Body = body[c.id];
-            return (
-              <section
-                class="column"
-                id={`col-${c.id}`}
-                data-col={i}
-                data-id={c.id}
-                data-href={c.href}
-                data-title={c.title}
-                data-active={String(i === index)}
-                aria-label={c.label}
-                inert={i !== index}
-              >
-                <Body />
-              </section>
-            );
-          })
-        }
-      </div>
-    </main>
+  <Lightbox />
 
-    <Lightbox />
-
-    <footer class="chrome chrome--bottom">
-      <Panel label="footer" as="div">
-        <div class="footer">
-          <span>© 2026 · {profile.handle}</span>
-          <span title="commit">⎇ {commit}</span>
-        </div>
-        <span slot="foot" class="panel__foot keyhint">[1-5 column · ←/→ h/l scroll]</span>
-        <span slot="foot" class="panel__foot panel__foot--right keyhint">[↑/↓ j/k panel · esc]</span>
-      </Panel>
-    </footer>
-
-    <script>
-      import { initCarousel } from '../scripts/carousel';
-      initCarousel();
-    </script>
-  </body>
-</html>
+  <script>
+    import { initCarousel } from '../scripts/carousel';
+    initCarousel();
+  </script>
+</Base>
