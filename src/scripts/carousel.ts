@@ -60,6 +60,18 @@ export function initCarousel(): void {
 
   document.documentElement.dataset.col = columns[active]?.dataset.id;
 
+  // other islands (command bar) move the carousel: { col: 'projects', panel?: 'heard' }
+  document.addEventListener('carousel:go', (e) => {
+    const { col, panel } = (e as CustomEvent<{ col: string; panel?: string }>).detail;
+    const i = columns.findIndex((c) => c.dataset.id === col);
+    if (i === -1) return;
+    go(i);
+    if (panel) {
+      const idx = panelsOf(i).findIndex((p) => p.dataset.panelName === panel);
+      if (idx !== -1) setFocusedPanel(i, idx);
+    }
+  });
+
   // nav links: real hrefs without JS; client-side slide with it
   navLinks.forEach((a) =>
     a.addEventListener('click', (e) => {

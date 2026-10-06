@@ -74,7 +74,8 @@ const desc = description ?? `${profile.name} — ${profile.headline}`;
 
     <slot />
 
-    <footer class="chrome chrome--bottom">
+    <footer class="chrome chrome--bottom" id="footer">
+      <slot name="companion" />
       <Panel label="footer" as="div">
         <div class="footer">
           <span>© 2026 · {profile.handle}</span>

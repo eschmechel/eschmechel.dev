@@ -2,6 +2,7 @@
 import { render } from 'astro:content';
 import Panel from '../Panel.astro';
 import { banner, getProfile } from '../../lib/content';
+import { SUGGESTED } from '../../agent/core';
 
 const profile = await getProfile();
 const { Content } = await render(profile);
@@ -43,7 +44,18 @@ const art = banner(p.handle);
 </Panel>
 
 <Panel label="ask">
-  <p class="dim">The command bar and agent land in a later phase. Press <kbd>2</kbd> for projects meanwhile.</p>
+  <div class="log" id="agent-log" aria-live="polite">
+    <p class="log__hint dim">Press <kbd>/</kbd> and ask anything about Elliott, or <kbd>:help</kbd> for commands.</p>
+  </div>
+  <ul class="suggest" aria-label="Suggested questions">
+    {
+      SUGGESTED.map((q) => (
+        <li>
+          <button type="button" data-ask={q}>{q}</button>
+        </li>
+      ))
+    }
+  </ul>
 </Panel>
 
 <style>
@@ -96,6 +108,45 @@ const art = banner(p.handle);
   }
   kbd {
     font: inherit;
+    color: var(--accent);
+  }
+  .log {
+    max-height: 18rem;
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+  .log :global(p) {
+    margin: 0 0 0.55rem;
+    white-space: pre-wrap;
+    font-size: var(--fs-sm);
+  }
+  .log :global(.log__q) {
+    color: var(--accent);
+  }
+  .log :global(.log__a) {
+    color: var(--fg-strong);
+  }
+  .log :global(.log__err) {
+    color: var(--warn);
+  }
+  .suggest {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin-top: 0.8rem;
+  }
+  .suggest button {
+    border: 1px dashed var(--border-strong);
+    border-radius: 5px;
+    background: none;
+    padding: 0.1rem 0.5rem;
+    font: inherit;
+    font-size: var(--fs-sm);
+    color: var(--fg);
+    cursor: pointer;
+  }
+  .suggest button:hover {
+    border-color: var(--accent);
     color: var(--accent);
   }
   @media (max-width: 720px) {

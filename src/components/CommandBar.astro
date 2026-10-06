@@ -1,0 +1,140 @@
+---
+// Footer overlay: `/` or `:` opens a prompt over the footer. `:commands` run locally, anything
+// else goes to the agent (/api/chat) and the answer lands in the ask panel (whoami column).
+// Also renders the ASCII tiger companion that sits on the footer's top edge, and the mobile `/` button.
+import { getPosts, getProjects } from '../lib/content';
+
+const targets = {
+  projects: [...(await getProjects('featured')), ...(await getProjects('archived'))].map((p) => p.data.name),
+  posts: (await getPosts()).map((p) => p.id),
+};
+---
+
+<div class="cmdbar" id="cmdbar" hidden data-targets={JSON.stringify(targets)}>
+  <div class="panel cmdbar__panel">
+    <h2 class="panel__label">cmd</h2>
+    <form id="cmd-form" autocomplete="off">
+      <label class="prompt" for="cmd-input">&gt;</label>
+      <input id="cmd-input" type="text" maxlength="500" spellcheck="false" autocapitalize="off" enterkeyhint="send" placeholder="ask about Elliott, or :help" />
+    </form>
+    <span class="panel__foot keyhint">[enter run · tab complete · ↑ history]</span>
+    <span class="panel__foot panel__foot--right keyhint">[esc close]</span>
+  </div>
+</div>
+
+<pre class="tiger" id="tiger" data-state="idle" aria-hidden="true"> /\=/\
+(=o.o=)~</pre>
+
+<button class="cmd-fab" id="cmd-fab" type="button" aria-label="Open command bar">/</button>
+
+<script>
+  import { initCommandBar } from '../scripts/cmdbar';
+  initCommandBar();
+</script>
+
+<style>
+  .cmdbar {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background: var(--bg);
+  }
+  .cmdbar[hidden] {
+    display: none;
+  }
+  /* hide the footer underneath so its label and key hints don't peek out around the overlay */
+  :global(.chrome--bottom:has(.cmdbar:not([hidden])) > .panel) {
+    visibility: hidden;
+  }
+  .cmdbar__panel {
+    margin: 0;
+    height: 100%;
+    padding-block: 0.7rem;
+    border-color: var(--accent);
+  }
+  .cmdbar__panel > .panel__label {
+    color: var(--accent);
+  }
+  form {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .prompt {
+    color: var(--accent);
+  }
+  input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    font: inherit;
+    color: var(--fg-strong);
+    caret-color: var(--accent);
+  }
+  input::placeholder {
+    color: var(--fg-dim);
+  }
+
+  /* the companion sits on the footer's top border, right of centre */
+  .tiger {
+    position: absolute;
+    right: 5.5rem;
+    bottom: calc(100% - 0.35rem);
+    z-index: 3;
+    margin: 0;
+    font: 0.75rem/1 var(--font);
+    font-variant-ligatures: none;
+    color: var(--accent);
+    background: var(--bg);
+    padding: 0 0.15rem;
+    pointer-events: none;
+    transition: transform 160ms;
+  }
+  .tiger[data-state='think'] {
+    color: var(--fg-strong);
+  }
+  .tiger[data-state='asleep'] {
+    color: var(--fg-dim);
+  }
+  .tiger[data-state='pounce'] {
+    animation: pounce 520ms cubic-bezier(0.3, 1.6, 0.5, 1);
+  }
+  @keyframes pounce {
+    40% {
+      transform: translate(-0.6rem, -0.7rem);
+    }
+  }
+
+  .cmd-fab {
+    display: none;
+  }
+  @media (max-width: 720px) {
+    .cmd-fab {
+      display: block;
+      position: absolute;
+      right: 0.75rem;
+      bottom: calc(100% + 0.75rem);
+      width: 2.6rem;
+      height: 2.6rem;
+      border: 1px solid var(--accent);
+      border-radius: 50%;
+      background: var(--bg);
+      color: var(--accent);
+      font: 600 1.1rem/1 var(--font);
+    }
+    .tiger {
+      right: 4rem;
+    }
+    /* let the end of a column scroll clear of the floating button */
+    :global(.column) {
+      padding-bottom: 4.5rem;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tiger[data-state='pounce'] {
+      animation: none;
+    }
+  }
+</style>

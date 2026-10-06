@@ -8,6 +8,15 @@ const opinions = await Promise.all(
 );
 ---
 
+<Panel label="out exploring">
+  <pre class="scene" role="img" aria-label="ASCII drawing: a kid pulling a wagon with a stuffed tiger riding in it">{String.raw`       _                        /\=/\
+      (_)                      (=o.o=)
+     /|_|\___________________  /     \
+      | |                    \|_______|
+     _| |_                    (o)   (o)
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`}</pre>
+</Panel>
+
 <Panel label="now">
   <ul class="now">
     {
@@ -41,6 +50,13 @@ const opinions = await Promise.all(
 }
 
 <style>
+  .scene {
+    margin: 0;
+    font: 0.8rem/1 var(--font);
+    font-variant-ligatures: none;
+    color: var(--fg-strong);
+    overflow-x: auto;
+  }
   .now li {
     display: flex;
     gap: 1rem;

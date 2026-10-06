@@ -259,6 +259,107 @@ await check('reader keys: j scrolls, 2 → /projects, Esc → /blog', async () =
   await desktop.waitForURL('**/projects');
 });
 
+// ── command bar + agent client + tiger (phase 6) ─────────────────────
+const bar = desktop;
+const cmd = async (text) => {
+  await bar.keyboard.press('/');
+  await bar.fill('#cmd-input', text);
+  await bar.press('#cmd-input', 'Enter');
+  await settle(bar);
+};
+const lastLog = () => bar.$eval('#agent-log', (l) => ({ cls: l.lastElementChild?.className, text: l.lastElementChild?.textContent }));
+let mockReply = { status: 200, body: { answer: 'Elliott builds GPU infra and edge apps.', source: 'model' } };
+let lastBody = null;
+await bar.route('**/api/chat', async (route) => {
+  lastBody = route.request().postDataJSON();
+  if (mockReply === 'abort') return route.abort();
+  await route.fulfill({ status: mockReply.status, contentType: 'application/json', body: JSON.stringify(mockReply.body) });
+});
+
+await check('cmd: / opens the bar; :projects jumps and closes it', async () => {
+  await bar.goto(BASE + '/');
+  await bar.keyboard.press('/');
+  expect(await bar.$eval('#cmdbar', (b) => !b.hidden), 'bar not open');
+  expect(await bar.evaluate(() => document.activeElement?.id === 'cmd-input'), 'input not focused');
+  await bar.keyboard.type('3'); // typing must not move the carousel
+  expect((await state(bar)).col === 'whoami', 'carousel moved while typing in the bar');
+  await bar.fill('#cmd-input', ':projects');
+  await bar.press('#cmd-input', 'Enter');
+  await settle(bar);
+  expect((await state(bar)).col === 'projects', 'did not jump');
+  expect(await bar.$eval('#cmdbar', (b) => b.hidden), 'bar still open');
+});
+
+await check('cmd: tab completes commands and :open targets', async () => {
+  await bar.keyboard.press('/');
+  await bar.fill('#cmd-input', ':pro');
+  await bar.press('#cmd-input', 'Tab');
+  expect((await bar.inputValue('#cmd-input')) === ':projects', 'command completion');
+  await bar.fill('#cmd-input', ':open herm');
+  await bar.press('#cmd-input', 'Tab');
+  expect((await bar.inputValue('#cmd-input')) === ':open hermes-apprentice', 'target completion');
+  await bar.press('#cmd-input', 'Escape');
+  expect(await bar.$eval('#cmdbar', (b) => b.hidden), 'esc did not close');
+});
+
+await check('cmd: :open <project> focuses its panel', async () => {
+  await bar.goto(BASE + '/');
+  await cmd(':open beepd');
+  const focused = await bar.$eval('#col-projects [data-focused="true"]', (p) => p.dataset.panelName);
+  expect((await state(bar)).col === 'projects' && focused === 'beepd', `${focused}`);
+});
+
+await check('cmd: :help and unknown commands answer in the ask panel', async () => {
+  await cmd(':help');
+  expect((await state(bar)).col === 'whoami', 'help should show on whoami');
+  expect((await lastLog()).text.includes(':open <project|post>'), 'help text');
+  await cmd(':nope');
+  const l = await lastLog();
+  expect(l.cls === 'log__err' && l.text.includes('unknown command'), l.text);
+});
+
+await check('agent: a question posts to /api/chat and the answer lands; tiger pounces', async () => {
+  await bar.goto(BASE + '/resume');
+  await cmd('what is he building?');
+  await bar.waitForFunction(() => document.querySelector('#agent-log')?.lastElementChild?.className === 'log__a');
+  expect(lastBody?.message === 'what is he building?', JSON.stringify(lastBody));
+  expect((await lastLog()).text === 'Elliott builds GPU infra and edge apps.', 'answer text');
+  expect((await state(bar)).col === 'whoami', 'answer should bring whoami into view');
+  expect((await bar.$eval('#tiger', (t) => t.dataset.state)) === 'pounce', 'tiger');
+});
+
+await check('agent: suggestion buttons ask their question', async () => {
+  await bar.click('[data-ask="Tell me about Heard."]');
+  await bar.waitForFunction(() => document.querySelector('#agent-log')?.lastElementChild?.className === 'log__a');
+  expect(lastBody?.message === 'Tell me about Heard.', JSON.stringify(lastBody));
+});
+
+await check('agent: 429 / 503 / offline each give a clear message', async () => {
+  mockReply = { status: 429, body: { error: 'slow down' } };
+  await cmd('one more?');
+  await bar.waitForFunction(() => document.querySelector('#agent-log')?.lastElementChild?.textContent === 'slow down');
+  mockReply = { status: 503, body: {} };
+  await cmd('and another?');
+  await bar.waitForFunction(() => document.querySelector('#tiger')?.dataset.state === 'asleep');
+  expect((await lastLog()).text.includes('asleep'), 'asleep text');
+  mockReply = 'abort';
+  await cmd('hello?');
+  await bar.waitForFunction(() => document.querySelector('#agent-log')?.lastElementChild?.textContent?.includes('offline'));
+  mockReply = { status: 200, body: { answer: 'ok', source: 'model' } };
+});
+
+await check('cmd: :open <post> navigates to the post', async () => {
+  await cmd(':open your-ai-slop-bores-me');
+  await bar.waitForURL('**/blog/your-ai-slop-bores-me');
+});
+await bar.unroute('**/api/chat');
+
+await desktop.goto(BASE + '/');
+await desktop.keyboard.press('/');
+await desktop.keyboard.type('what is Elliott building right now?');
+await desktop.screenshot({ path: `${OUT}/desktop-1440-cmdbar.png` });
+await desktop.keyboard.press('Escape');
+
 await desktop.goto(BASE + '/blog/protect-yourself-mesh-yourself');
 await desktop.waitForTimeout(400);
 await desktop.screenshot({ path: `${OUT}/desktop-1440-post.png` });
@@ -314,6 +415,11 @@ await check('mobile: vertical drag does not switch', async () => {
   });
   await settle(mobile);
   expect((await state(mobile)).col === 'whoami', 'switched on vertical drag');
+});
+await check('mobile: floating / button opens the command bar', async () => {
+  await mobile.tap('#cmd-fab');
+  expect(await mobile.$eval('#cmdbar', (b) => !b.hidden), 'bar not open');
+  await mobile.press('#cmd-input', 'Escape');
 });
 await mobile.screenshot({ path: `${OUT}/mobile-390-whoami.png` });
 

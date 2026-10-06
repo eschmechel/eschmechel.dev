@@ -7,6 +7,7 @@ import Resume from '../components/columns/Resume.astro';
 import Blog from '../components/columns/Blog.astro';
 import Home from '../components/columns/Home.astro';
 import Lightbox from '../components/Lightbox.astro';
+import CommandBar from '../components/CommandBar.astro';
 
 interface Props {
   initial: ColumnId;
@@ -17,7 +18,8 @@ const column = COLUMNS[index];
 const body = { whoami: Whoami, projects: Projects, resume: Resume, blog: Blog, home: Home };
 ---
 
-<Base title={column.title} path={column.href} active={index} keysLeft="[1-5 column · ←/→ h/l scroll]" keysRight="[↑/↓ j/k panel · esc]">
+<Base title={column.title} path={column.href} active={index} keysLeft="[1-5 column · ←/→ h/l scroll]" keysRight="[↑/↓ j/k panel · / ask]">
+  <CommandBar slot="companion" />
   <main class="viewport" id="viewport">
     <div class="track" id="track" style={`--i:${index}`} data-active={index}>
       {
