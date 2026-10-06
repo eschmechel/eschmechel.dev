@@ -1,0 +1,15 @@
+---
+interface Props {
+  label: string;
+  as?: 'section' | 'nav' | 'div';
+  class?: string;
+}
+const { label, as: Tag = 'section', class: className } = Astro.props;
+const id = `p-${label.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').toLowerCase() || 'home'}-${Math.random().toString(36).slice(2, 7)}`;
+---
+
+<Tag class:list={['panel', className]} aria-labelledby={id} data-panel>
+  <h2 class="panel__label" id={id}>{label}</h2>
+  <slot />
+  <slot name="foot" />
+</Tag>

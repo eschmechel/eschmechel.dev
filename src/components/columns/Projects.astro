@@ -1,0 +1,58 @@
+---
+import Panel from '../Panel.astro';
+import { ARCHIVED, FEATURED } from '../../data/seed';
+---
+
+{
+  FEATURED.map((p) => (
+    <Panel label={p.name}>
+      <p>{p.summary}</p>
+      <div class="chips">
+        {p.status.map((s) => <span class={`chip chip--${s.tone}`}>{s.text}</span>)}
+        {p.tech.map((t) => <span class="chip">{t}</span>)}
+      </div>
+      {p.links.length > 0 && (
+        <ul class="links">
+          {p.links.map((l) => (
+            <li>
+              <a href={l.href} target={l.href.startsWith('http') ? '_blank' : undefined} rel="noopener">
+                ↗ {l.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+    </Panel>
+  ))
+}
+
+<Panel label="archive">
+  <ul class="archive">
+    {
+      ARCHIVED.map((a) => (
+        <li>
+          <a href={a.href} target="_blank" rel="noopener">{a.name}</a>
+          <span>{a.note}</span>
+        </li>
+      ))
+    }
+  </ul>
+</Panel>
+
+<style>
+  .links {
+    display: flex;
+    gap: 1.25rem;
+    margin-top: 0.8rem;
+    font-size: var(--fs-sm);
+  }
+  .archive li {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    font-size: var(--fs-sm);
+  }
+  .archive span {
+    color: var(--fg-dim);
+  }
+</style>

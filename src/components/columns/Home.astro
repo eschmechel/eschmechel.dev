@@ -1,0 +1,45 @@
+---
+import Panel from '../Panel.astro';
+import { NOW } from '../../data/seed';
+---
+
+<Panel label="now">
+  <ul class="now">
+    {
+      NOW.map((n) => (
+        <li>
+          <span class="now__label">{n.label}</span>
+          {n.text}
+        </li>
+      ))
+    }
+  </ul>
+</Panel>
+
+<Panel label="homelab">
+  <p class="dim">Live status from the lab (Proxmox · Prometheus · Uptime Kuma) arrives in the homelab phase.</p>
+</Panel>
+
+<Panel label="contributions">
+  <p class="dim">GitHub activity heatmap — later phase.</p>
+</Panel>
+
+<Panel label="opinions">
+  <p>You should probably run Arch. Or self-host everything. Or both.</p>
+  <p class="dim">(example stub — the real take goes here)</p>
+</Panel>
+
+<style>
+  .now li {
+    display: flex;
+    gap: 1rem;
+  }
+  .now__label {
+    width: 6rem;
+    color: var(--fg-dim);
+  }
+  .dim {
+    color: var(--fg-dim);
+    font-size: var(--fs-sm);
+  }
+</style>

@@ -1,0 +1,100 @@
+---
+import Panel from '../Panel.astro';
+import { EXPERIENCE, SKILLS } from '../../data/seed';
+---
+
+<Panel label="resume">
+  <p>
+    Systems-focused CS student. I like owning a thing end to end — infra, backend, and the bit of
+    frontend that makes it usable.
+  </p>
+  <p class="dim">PDF download arrives with the content phase.</p>
+</Panel>
+
+<Panel label="education">
+  <div class="row">
+    <strong>Langara College</strong>
+    <span>Vancouver, BC</span>
+  </div>
+  <div class="row sub">
+    <span>Associate of Science, Computer Science</span>
+    <span>Sep 2024 – May 2027 (expected)</span>
+  </div>
+</Panel>
+
+<Panel label="experience">
+  {
+    EXPERIENCE.map((e) => (
+      <article class="job">
+        <div class="row">
+          <strong>{e.role}</strong>
+          <span>{e.when}</span>
+        </div>
+        <div class="row sub">
+          <span>{e.org}</span>
+          <span>{e.where}</span>
+        </div>
+        <ul class="bullets">
+          {e.bullets.map((b) => <li>{b}</li>)}
+        </ul>
+      </article>
+    ))
+  }
+</Panel>
+
+<Panel label="skills">
+  {
+    SKILLS.map((s) => (
+      <div class="skill">
+        <span class="skill__group">{s.group}</span>
+        <div class="chips">{s.items.map((i) => <span class="chip">{i}</span>)}</div>
+      </div>
+    ))
+  }
+</Panel>
+
+<style>
+  .row {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  strong {
+    color: var(--fg-strong);
+    font-weight: 600;
+  }
+  .sub {
+    font-size: var(--fs-sm);
+  }
+  .job + .job {
+    margin-top: 1.1rem;
+  }
+  .bullets {
+    margin-top: 0.4rem;
+  }
+  .bullets li {
+    position: relative;
+    padding-left: 1.2rem;
+    font-size: var(--fs-sm);
+  }
+  .bullets li::before {
+    content: '›';
+    position: absolute;
+    left: 0.2rem;
+    color: var(--accent);
+  }
+  .skill + .skill {
+    margin-top: 0.9rem;
+  }
+  .skill__group {
+    font-size: var(--fs-sm);
+    color: var(--fg-dim);
+  }
+  .skill .chips {
+    margin-top: 0.35rem;
+  }
+  .dim {
+    color: var(--fg-dim);
+  }
+</style>

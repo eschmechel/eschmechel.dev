@@ -1,0 +1,47 @@
+:root {
+  color-scheme: dark;
+
+  /* palette — warm near-black, amber accent (D6) */
+  --bg: #0d0c0b;
+  --bg-raised: #141210;
+  --fg: #9c968c;
+  --fg-strong: #ddd6c8;
+  --fg-dim: #6b665e;
+  --border: #36322d;
+  --border-strong: #4d4740;
+  --accent: #f2a93b;
+  --accent-soft: rgb(242 169 59 / 0.12);
+  --win: #e9c46a;
+  --warn: #e07a4f;
+
+  /* type (D22) */
+  --font: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  --fs: 0.9375rem;
+  --fs-sm: 0.8125rem;
+  --lh: 1.6;
+
+  /* geometry */
+  --radius: 8px;
+  --col-w: min(46rem, calc(100vw - 2rem));
+  --gap: 1.5rem;
+  --chrome-top: 5.25rem;
+  --chrome-bottom: 5.5rem;
+  --dim: 0.26;
+  --slide: 420ms cubic-bezier(0.22, 0.7, 0.2, 1);
+}
+
+@media (max-width: 720px) {
+  :root {
+    --col-w: calc(100vw - 1.5rem);
+    --gap: 2.5rem;
+    --dim: 0;
+    --chrome-top: 4.75rem;
+    --chrome-bottom: 4.9rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --slide: 0ms linear;
+  }
+}

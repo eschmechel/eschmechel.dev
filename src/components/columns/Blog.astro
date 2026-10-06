@@ -1,0 +1,30 @@
+---
+import Panel from '../Panel.astro';
+---
+
+<Panel label="posts">
+  <ul class="posts">
+    <li>
+      <a href="https://dev.to/eschmechel/skills-are-prompts-heres-how-hermes-apprentice-turns-them-into-weights-59eh" target="_blank" rel="noopener">
+        Skills are Prompts. Here's how Hermes Apprentice turns them into weights
+      </a>
+      <span>2026-05-29</span>
+    </li>
+  </ul>
+  <p class="dim">Posts get imported from dev.to into local pages in the blog phase.</p>
+</Panel>
+
+<style>
+  .posts li {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.9rem;
+  }
+  .posts span,
+  .dim {
+    color: var(--fg-dim);
+    font-size: var(--fs-sm);
+    white-space: nowrap;
+  }
+</style>
