@@ -1,21 +1,54 @@
 ---
+import { Image } from 'astro:assets';
+import { render } from 'astro:content';
 import Panel from '../Panel.astro';
-import { ARCHIVED, FEATURED } from '../../data/seed';
+import { getProjects } from '../../lib/content';
+
+const featured = await Promise.all(
+  (await getProjects('featured')).map(async (p) => ({ ...p, Body: (await render(p)).Content })),
+);
+const archived = await Promise.all(
+  (await getProjects('archived')).map(async (p) => ({ ...p, Body: (await render(p)).Content })),
+);
+const external = (href: string) => href.startsWith('http');
 ---
 
 {
-  FEATURED.map((p) => (
+  featured.map(({ data: p, Body }) => (
     <Panel label={p.name}>
-      <p>{p.summary}</p>
-      <div class="chips">
-        {p.status.map((s) => <span class={`chip chip--${s.tone}`}>{s.text}</span>)}
-        {p.tech.map((t) => <span class="chip">{t}</span>)}
+      <span class="when">{p.when}</span>
+      <div class="summary">
+        <Body />
       </div>
+      {p.highlights.length > 0 && (
+        <ul class="bullets">
+          {p.highlights.map((h) => (
+            <li>{h}</li>
+          ))}
+        </ul>
+      )}
+      <div class="chips">
+        {p.status.map((s) => (
+          <span class={`chip chip--${s.tone}`}>{s.text}</span>
+        ))}
+        {p.tech.map((t) => (
+          <span class="chip">{t}</span>
+        ))}
+      </div>
+      {p.images.length > 0 && (
+        <div class="thumbs">
+          {p.images.map((img) => (
+            <a href={img.src.src} target="_blank" rel="noopener" class="thumb">
+              <Image src={img.src} alt={img.alt} width={256} height={160} fit="cover" position="top" />
+            </a>
+          ))}
+        </div>
+      )}
       {p.links.length > 0 && (
         <ul class="links">
           {p.links.map((l) => (
             <li>
-              <a href={l.href} target={l.href.startsWith('http') ? '_blank' : undefined} rel="noopener">
+              <a href={l.href} target={external(l.href) ? '_blank' : undefined} rel="noopener">
                 ↗ {l.label}
               </a>
             </li>
@@ -29,10 +62,11 @@ import { ARCHIVED, FEATURED } from '../../data/seed';
 <Panel label="archive">
   <ul class="archive">
     {
-      ARCHIVED.map((a) => (
+      archived.map(({ data: p, Body }) => (
         <li>
-          <a href={a.href} target="_blank" rel="noopener">{a.name}</a>
-          <span>{a.note}</span>
+          <a href={p.links[0]?.href} target="_blank" rel="noopener">{p.name}</a>
+          <span class="archive__when">{p.when}</span>
+          <div class="archive__note"><Body /></div>
         </li>
       ))
     }
@@ -40,6 +74,59 @@ import { ARCHIVED, FEATURED } from '../../data/seed';
 </Panel>
 
 <style>
+  .when {
+    position: absolute;
+    top: 0;
+    right: 0.75rem;
+    transform: translateY(-55%);
+    padding: 0 0.4rem;
+    background: var(--bg);
+    font-size: var(--fs-sm);
+    line-height: 1;
+    color: var(--fg-dim);
+  }
+  .summary :global(p) {
+    margin: 0;
+  }
+  .bullets {
+    margin-top: 0.6rem;
+  }
+  .bullets li {
+    position: relative;
+    padding-left: 1.2rem;
+    font-size: var(--fs-sm);
+  }
+  .bullets li + li {
+    margin-top: 0.2rem;
+  }
+  .bullets li::before {
+    content: '›';
+    position: absolute;
+    left: 0.2rem;
+    color: var(--accent);
+  }
+  .thumbs {
+    display: flex;
+    gap: 0.6rem;
+    margin-top: 0.85rem;
+  }
+  .thumb {
+    display: block;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    line-height: 0;
+    transition: border-color 160ms;
+  }
+  .thumb:hover {
+    border-color: var(--accent);
+  }
+  .thumb img {
+    width: 128px;
+    height: 80px;
+    object-fit: cover;
+    object-position: top;
+  }
   .links {
     display: flex;
     gap: 1.25rem;
@@ -47,12 +134,23 @@ import { ARCHIVED, FEATURED } from '../../data/seed';
     font-size: var(--fs-sm);
   }
   .archive li {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 1rem;
     font-size: var(--fs-sm);
   }
-  .archive span {
+  .archive li + li {
+    margin-top: 0.6rem;
+  }
+  .archive__when {
     color: var(--fg-dim);
+    text-align: right;
+  }
+  .archive__note {
+    grid-column: 1 / -1;
+    color: var(--fg-dim);
+  }
+  .archive__note :global(p) {
+    margin: 0;
   }
 </style>

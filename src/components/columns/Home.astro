@@ -1,12 +1,17 @@
 ---
+import { getCollection, render } from 'astro:content';
 import Panel from '../Panel.astro';
-import { NOW } from '../../data/seed';
+
+const now = await getCollection('now');
+const opinions = await Promise.all(
+  (await getCollection('opinions')).map(async (o) => ({ ...o, Body: (await render(o)).Content })),
+);
 ---
 
 <Panel label="now">
   <ul class="now">
     {
-      NOW.map((n) => (
+      now.map(({ data: n }) => (
         <li>
           <span class="now__label">{n.label}</span>
           {n.text}
@@ -24,10 +29,16 @@ import { NOW } from '../../data/seed';
   <p class="dim">GitHub activity heatmap — later phase.</p>
 </Panel>
 
-<Panel label="opinions">
-  <p>You should probably run Arch. Or self-host everything. Or both.</p>
-  <p class="dim">(example stub — the real take goes here)</p>
-</Panel>
+{
+  opinions.map(({ data: o, Body }) => (
+    <Panel label={o.title}>
+      <div class="prose">
+        <Body />
+      </div>
+      {o.stub && <p class="dim">(example stub — the real take goes here)</p>}
+    </Panel>
+  ))
+}
 
 <style>
   .now li {
@@ -36,7 +47,11 @@ import { NOW } from '../../data/seed';
   }
   .now__label {
     width: 6rem;
+    flex-shrink: 0;
     color: var(--fg-dim);
+  }
+  .prose :global(p) {
+    margin: 0 0 0.6em;
   }
   .dim {
     color: var(--fg-dim);

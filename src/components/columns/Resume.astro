@@ -1,41 +1,55 @@
 ---
+import { getCollection } from 'astro:content';
 import Panel from '../Panel.astro';
-import { EXPERIENCE, SKILLS } from '../../data/seed';
+import { fmtMonth, fmtRange, getExperience, getProfile } from '../../lib/content';
+
+const profile = (await getProfile()).data;
+const jobs = await getExperience();
+const schools = await getCollection('education');
+const skills = await getCollection('skills');
 ---
 
 <Panel label="resume">
-  <p>
-    Systems-focused CS student. I like owning a thing end to end — infra, backend, and the bit of
-    frontend that makes it usable.
-  </p>
-  <p class="dim">PDF download arrives with the content phase.</p>
+  <a class="download" href={profile.resumePdf} download aria-label="Download resume (PDF)" title="Download PDF">↓ pdf</a>
+  <p>{profile.headline}</p>
+  <p class="dim">Everything below is also in the PDF.</p>
 </Panel>
 
 <Panel label="education">
-  <div class="row">
-    <strong>Langara College</strong>
-    <span>Vancouver, BC</span>
-  </div>
-  <div class="row sub">
-    <span>Associate of Science, Computer Science</span>
-    <span>Sep 2024 – May 2027 (expected)</span>
-  </div>
+  {
+    schools.map(({ data: s }) => (
+      <>
+        <div class="row">
+          <strong>{s.school}</strong>
+          <span>{s.where}</span>
+        </div>
+        <div class="row sub">
+          <span>{s.program}</span>
+          <span>
+            {fmtMonth(s.start)} – {fmtMonth(s.expected)} (expected)
+          </span>
+        </div>
+      </>
+    ))
+  }
 </Panel>
 
 <Panel label="experience">
   {
-    EXPERIENCE.map((e) => (
+    jobs.map(({ data: e }) => (
       <article class="job">
         <div class="row">
           <strong>{e.role}</strong>
-          <span>{e.when}</span>
+          <span>{fmtRange(e.start, e.end)}</span>
         </div>
         <div class="row sub">
           <span>{e.org}</span>
           <span>{e.where}</span>
         </div>
         <ul class="bullets">
-          {e.bullets.map((b) => <li>{b}</li>)}
+          {e.bullets.map((b) => (
+            <li>{b}</li>
+          ))}
         </ul>
       </article>
     ))
@@ -44,16 +58,34 @@ import { EXPERIENCE, SKILLS } from '../../data/seed';
 
 <Panel label="skills">
   {
-    SKILLS.map((s) => (
+    skills.map(({ data: s }) => (
       <div class="skill">
         <span class="skill__group">{s.group}</span>
-        <div class="chips">{s.items.map((i) => <span class="chip">{i}</span>)}</div>
+        <div class="chips">
+          {s.items.map((i) => (
+            <span class="chip">{i}</span>
+          ))}
+        </div>
       </div>
     ))
   }
 </Panel>
 
 <style>
+  .download {
+    position: absolute;
+    top: 0;
+    right: 0.75rem;
+    transform: translateY(-55%);
+    padding: 0 0.4rem;
+    background: var(--bg);
+    font-size: var(--fs-sm);
+    line-height: 1;
+    color: var(--accent);
+  }
+  .download:hover {
+    color: var(--fg-strong);
+  }
   .row {
     display: flex;
     justify-content: space-between;

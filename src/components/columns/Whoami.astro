@@ -1,14 +1,20 @@
 ---
+import { render } from 'astro:content';
 import Panel from '../Panel.astro';
-import { BANNER, PROFILE } from '../../data/seed';
+import { banner, getProfile } from '../../lib/content';
+
+const profile = await getProfile();
+const { Content } = await render(profile);
+const p = profile.data;
+const art = banner(p.handle);
 ---
 
 <Panel label="me">
   <div class="me">
-    <pre class="banner" aria-label={PROFILE.name}>{BANNER}</pre>
+    <pre class="banner" role="img" aria-label={p.name}>{art}</pre>
     <ul class="facts">
       {
-        PROFILE.facts.map((f) => (
+        p.facts.map((f) => (
           <li>
             <span class="facts__icon" aria-hidden="true">{f.icon}</span>
             {f.text}
@@ -21,18 +27,19 @@ import { BANNER, PROFILE } from '../../data/seed';
 
 <Panel label="socials">
   <ul class="socials">
-    {PROFILE.socials.map((s) => <li><a href={s.href} rel="me noopener" target={s.href.startsWith('http') ? '_blank' : undefined}>{s.label}</a></li>)}
+    {
+      p.socials.map((s) => (
+        <li>
+          <a href={s.href} rel="me noopener" target={s.href.startsWith('http') ? '_blank' : undefined}>{s.label}</a>
+        </li>
+      ))
+    }
   </ul>
 </Panel>
 
 <Panel label="about">
-  <p class="headline">{PROFILE.headline}</p>
-  <p>
-    I ship end to end across Go, C++, TypeScript and Python — most recently an on-device lip-reading
-    pipeline, a loop that turns an agent's repeated work into small fine-tuned specialists, and
-    serverless backends on Cloudflare's edge.
-  </p>
-  <p>Final-year CS at Langara. Previously a Technical Content Engineer at LicenseSpring.</p>
+  <p class="headline">{p.headline}</p>
+  <div class="prose"><Content /></div>
 </Panel>
 
 <Panel label="ask">
@@ -45,12 +52,18 @@ import { BANNER, PROFILE } from '../../data/seed';
     gap: 1.75rem;
     align-items: center;
   }
+  /* ASCII art only lines up when rows touch and glyphs keep their exact advance */
   .banner {
+    flex-shrink: 0;
     margin: 0;
     color: var(--accent);
-    font-size: 0.78rem;
-    line-height: 1.2;
-    flex-shrink: 0;
+    font-family: var(--font);
+    font-size: 0.8rem;
+    line-height: 1;
+    letter-spacing: 0;
+    font-kerning: none;
+    font-variant-ligatures: none;
+    white-space: pre;
   }
   .facts li {
     display: flex;
@@ -72,6 +85,12 @@ import { BANNER, PROFILE } from '../../data/seed';
   .headline {
     color: var(--fg-strong);
   }
+  .prose :global(p) {
+    margin: 0 0 0.9em;
+  }
+  .prose :global(p:last-child) {
+    margin-bottom: 0;
+  }
   .dim {
     color: var(--fg-dim);
   }
@@ -84,6 +103,9 @@ import { BANNER, PROFILE } from '../../data/seed';
       flex-direction: column;
       align-items: flex-start;
       gap: 1rem;
+    }
+    .banner {
+      font-size: 0.72rem;
     }
   }
 </style>

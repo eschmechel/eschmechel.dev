@@ -1,0 +1,26 @@
+# D12: plain lists only — never levels, ratings or bars.
+- id: languages
+  group: languages
+  items: [Go, C++, Python, TypeScript, SQL, Bash, HTML/CSS]
+  verified: true
+  source: HTN resume
+- id: backend
+  group: backend / data
+  items: [REST APIs, Hono, FastAPI, Next.js, Drizzle ORM, PostgreSQL]
+  verified: true
+  source: HTN resume
+- id: infra
+  group: infrastructure
+  items: [Docker, Kubernetes, Proxmox, Firecracker microVMs, Cloudflare Workers / Pages / D1, GitHub Actions, Lambda Labs]
+  verified: true
+  source: HTN resume
+- id: ml
+  group: ml / ai
+  items: [LoRA fine-tuning (Unsloth), local LLMs, MCP servers, RAG (Vectorize), Deepgram]
+  verified: true
+  source: HTN resume
+- id: systems
+  group: linux / systems
+  items: [Arch Linux (daily driver), Ubuntu, Debian, self-hosted services]
+  verified: true
+  source: HTN resume

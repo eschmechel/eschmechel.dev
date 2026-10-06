@@ -158,6 +158,35 @@ await check('reduced motion disables the slide', async () => {
   expect(dur === '0s', `transition ${dur}`);
 });
 
+await check('banner glyphs share one advance width and rows touch (aligned art)', async () => {
+  await desktop.goto(BASE + '/');
+  await desktop.evaluate(() => document.fonts.ready);
+  const m = await desktop.$eval('pre.banner', (pre) => {
+    const cs = getComputedStyle(pre);
+    const probe = document.createElement('span');
+    probe.style.cssText = `font:${cs.font};letter-spacing:${cs.letterSpacing};font-variant-ligatures:none;white-space:pre;position:absolute;visibility:hidden`;
+    document.body.append(probe);
+    const widths = [...new Set(pre.textContent.replace(/\n/g, ''))].map((ch) => {
+      probe.textContent = ch.repeat(20);
+      return probe.getBoundingClientRect().width / 20;
+    });
+    probe.remove();
+    return { min: Math.min(...widths), max: Math.max(...widths), lh: parseFloat(cs.lineHeight), fs: parseFloat(cs.fontSize), family: cs.fontFamily };
+  });
+  expect(m.max - m.min < 0.01, `glyph advances differ: ${m.min}–${m.max}px`);
+  expect(Math.abs(m.lh - m.fs) < 0.5, `line-height ${m.lh} vs font-size ${m.fs}`);
+  expect(m.family.includes('IBM Plex Mono'), `font ${m.family}`);
+});
+
+await check('resume PDF link + project thumbnails present', async () => {
+  await desktop.goto(BASE + '/resume');
+  const href = await desktop.$eval('a.download', (a) => a.getAttribute('href'));
+  expect((await fetch(BASE + href)).headers.get('content-type')?.includes('pdf'), 'pdf');
+  await desktop.goto(BASE + '/projects');
+  const thumbs = await desktop.$$eval('.thumb img', (imgs) => imgs.filter((i) => i.complete && i.naturalWidth > 0).length);
+  expect(thumbs === 3, `loaded thumbnails ${thumbs}`);
+});
+
 for (const [path, id] of routes) {
   await desktop.goto(BASE + path);
   await settle(desktop);

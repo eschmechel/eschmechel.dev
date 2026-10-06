@@ -35,6 +35,9 @@ check "/resume → resume" route /resume resume
 check "/blog → blog" route /blog blog
 check "/~ → home" route /~ home
 check "favicon served" curl -fs "http://127.0.0.1:$PORT/favicon.svg"
+check "resume PDF served" bash -c "curl -fsI http://127.0.0.1:$PORT/Elliott-Schmechel-Resume.pdf | grep -qi 'application/pdf'"
+check "project thumbnails optimised" bash -c "ls dist/_astro/*.webp >/dev/null"
+check "banner matches figlet byte-for-byte" node tests/banner.check.mjs
 check "no skill-rating markup (D12)" bash -c "! grep -rEiq '(★|☆|[0-9]+ ?/ ?(5|10)\\b|progress|level)' dist --include=*.html"
 
 echo "smoke: $pass/$total"

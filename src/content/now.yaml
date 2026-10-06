@@ -1,0 +1,10 @@
+- id: building
+  label: building
+  text: this site, v3
+  verified: false
+  source: drafted by Claude
+- id: studying
+  label: studying
+  text: final year of CS at Langara
+  verified: false
+  source: drafted by Claude

@@ -6,7 +6,7 @@ import '../styles/tokens.css';
 import '../styles/base.css';
 import { execSync } from 'node:child_process';
 import { COLUMNS, type ColumnId } from '../data/columns';
-import { PROFILE } from '../data/seed';
+import { getProfile, reportUnverified } from '../lib/content';
 import Panel from '../components/Panel.astro';
 import Whoami from '../components/columns/Whoami.astro';
 import Projects from '../components/columns/Projects.astro';
@@ -32,6 +32,8 @@ function commitHash(): string {
   }
 }
 const commit = commitHash();
+const profile = (await getProfile()).data;
+await reportUnverified();
 ---
 
 <!doctype html>
@@ -40,7 +42,7 @@ const commit = commitHash();
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{column.title}</title>
-    <meta name="description" content={`${PROFILE.name} — ${PROFILE.headline}`} />
+    <meta name="description" content={`${profile.name} — ${profile.headline}`} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={new URL(column.href, Astro.site)} />
   </head>
@@ -90,7 +92,7 @@ const commit = commitHash();
     <footer class="chrome chrome--bottom">
       <Panel label="footer" as="div">
         <div class="footer">
-          <span>© 2026 · {PROFILE.handle}</span>
+          <span>© 2026 · {profile.handle}</span>
           <span title="commit">⎇ {commit}</span>
         </div>
         <span slot="foot" class="panel__foot keyhint">[1-5 column · ←/→ h/l scroll]</span>

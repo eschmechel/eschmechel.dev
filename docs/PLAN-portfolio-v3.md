@@ -82,4 +82,8 @@ Not touching `main` or `portfolio-v2` beyond the snapshot commit; no light theme
 - Homelab exposure is the largest security surface — read-only tokens, Access, sanitised output.
 - Heard repo is teammate-owned — frame as "built the ML / lip-reading pipeline".
 - Content `verified` flags need the user's pass.
-- Status (2026-10-06): v2 snapshot commit blocked — 1Password SSH/GPG signing agent unreachable; v2 files staged, commit pending.
+- Content conflict: HTN resume says Langara ends Dec 2026; interview D29 says May 2027 (site uses May 2027).
+
+## Status
+
+- 2026-10-06 — Phases 1–3 done (`1dc1055`). Phase 4 done: content collections, `verified` flags, thumbnails, PDF, figlet-at-build banner.
