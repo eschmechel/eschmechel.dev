@@ -7,7 +7,9 @@
     "build": "astro check && astro build",
     "preview": "astro preview",
     "check:e2e": "node tests/e2e.mjs",
-    "sync:devto": "node scripts/sync-devto.ts"
+    "sync:devto": "node scripts/sync-devto.ts",
+    "agent:pregen": "node scripts/pregen-answers.ts",
+    "check:api": "node tests/api.check.mjs"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.19",
@@ -21,6 +23,7 @@
     "@types/node": "^26.6.4",
     "figlet": "^1.12.0",
     "playwright": "^1.63.0",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "wrangler": "^4.148.0"
   }
 }

@@ -40,6 +40,8 @@ check "every post page renders (canonical → eschmechel.dev)" bash -c '
   done'
 check "rss.xml lists every post" bash -c "[ \$(curl -fs http://127.0.0.1:$PORT/rss.xml | grep -o '<item>' | wc -l) -eq \$(ls dist/blog | grep -vc index.html) ]"
 check "sitemap includes posts" bash -c "grep -q '/blog/your-ai-slop-bores-me/' dist/sitemap-0.xml"
+check "agent API logic (mock AI + KV)" node tests/api.check.mjs
+check "Pages Functions bundle" bash -c "npx wrangler pages functions build --outdir \"\${TMPDIR:-/tmp}/eschmechel-fn\" >/dev/null 2>&1"
 check "favicon served" curl -fs "http://127.0.0.1:$PORT/favicon.svg"
 check "resume PDF served" bash -c "curl -fsI http://127.0.0.1:$PORT/Elliott-Schmechel-Resume.pdf | grep -qi 'application/pdf'"
 check "project thumbnails optimised" bash -c "ls dist/_astro/*.webp >/dev/null"
