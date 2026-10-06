@@ -31,8 +31,16 @@ const opinions = await Promise.all(
 </Panel>
 
 <Panel label="homelab">
-  <p class="dim">Live status from the lab (Proxmox · Prometheus · Uptime Kuma) arrives in the homelab phase.</p>
+  <div class="lab" id="homelab" data-state="loading" aria-live="polite">
+    <p class="lab__note">checking the lab…</p>
+  </div>
+  <noscript><p class="dim">Live lab status needs JavaScript.</p></noscript>
 </Panel>
+
+<script>
+  import { initHomelab } from '../../scripts/homelab';
+  initHomelab();
+</script>
 
 <Panel label="contributions">
   <p class="dim">GitHub activity heatmap — later phase.</p>
@@ -56,6 +64,53 @@ const opinions = await Promise.all(
     font-variant-ligatures: none;
     color: var(--fg-strong);
     overflow-x: auto;
+  }
+  /* rendered by src/scripts/homelab.ts, so these need :global */
+  .lab :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--fs-sm);
+  }
+  .lab :global(th) {
+    text-align: left;
+    font-weight: 400;
+    color: var(--fg-dim);
+    padding-bottom: 0.3rem;
+  }
+  .lab :global(td) {
+    padding: 0.15rem 0.8rem 0.15rem 0;
+    color: var(--fg-strong);
+    white-space: nowrap;
+  }
+  .lab :global(tr.is-down td) {
+    color: var(--warn);
+  }
+  .lab :global(.lab__svcs) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.2rem;
+    margin-top: 0.8rem;
+    font-size: var(--fs-sm);
+  }
+  .lab :global(.is-up .lab__dot) {
+    color: var(--accent);
+  }
+  .lab :global(.is-down) {
+    color: var(--warn);
+  }
+  .lab :global(.lab__pct) {
+    color: var(--fg-dim);
+  }
+  .lab :global(.lab__note) {
+    margin: 0.7rem 0 0;
+    font-size: var(--fs-sm);
+    color: var(--fg-dim);
+  }
+  .lab :global(.lab__note:first-child) {
+    margin-top: 0;
+  }
+  .lab[data-state='stale'] :global(.lab__note:last-child) {
+    color: var(--warn);
   }
   .now li {
     display: flex;

@@ -88,3 +88,4 @@ Not touching `main` or `portfolio-v2` beyond the snapshot commit; no light theme
 
 - 2026-10-06 — Phases 1–3 done (`1dc1055`). Phase 4 done: content collections, `verified` flags, thumbnails, PDF, figlet-at-build banner.
 - 2026-10-06 — Phase 4 polish: lightbox, Devpost/LinkedIn galleries, 14 KB first-flight budget (~11.7 KB/page). Phase 5 done: `npm run sync:devto` (5 posts, images localised as webp), post pages, RSS, sitemap. dev.to `canonical_url` flip still pending (Phase 9, ask first).
+- 2026-10-06 — Phase 6 (command bar, ask panel, tiger, ~/ scene), Phase 7 (/api/chat: Workers AI, KV cache, per-IP limit, neuron budget, pregen script) and Phase 8 (Go exporter, /api/status with Access + last-seen, live ~/ panel) done in code and tested locally. Not yet deployed: needs KV id, Cloudflare login, tunnel + Access token (docs/DEPLOY.md).

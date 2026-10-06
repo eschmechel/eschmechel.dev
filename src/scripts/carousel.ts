@@ -43,6 +43,7 @@ export function initCarousel(): void {
     navLinks.forEach((a, j) => (j === i ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current')));
 
     const col = columns[i];
+    document.dispatchEvent(new CustomEvent('carousel:changed', { detail: { col: col.dataset.id } }));
     document.title = col.dataset.title ?? document.title;
     document.documentElement.dataset.col = col.dataset.id;
     if (col.dataset.href && location.pathname.replace(/\/$/, '') !== col.dataset.href.replace(/\/$/, '')) {

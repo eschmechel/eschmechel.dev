@@ -7,3 +7,5 @@ dist/
 .dev.vars
 .playwright-mcp/
 .artifacts/
+homelab-exporter/.env
+homelab-exporter/homelab-exporter

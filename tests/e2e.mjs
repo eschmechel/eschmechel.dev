@@ -354,6 +354,65 @@ await check('cmd: :open <post> navigates to the post', async () => {
 });
 await bar.unroute('**/api/chat');
 
+// ── homelab panel (phase 8) ──────────────────────────────────────────
+let statusReply = { status: 200, body: { configured: false } };
+let statusCalls = 0;
+await desktop.route('**/api/status', async (route) => {
+  statusCalls++;
+  await route.fulfill({ status: statusReply.status, contentType: 'application/json', body: JSON.stringify(statusReply.body) });
+});
+const lab = () => desktop.$eval('#homelab', (l) => ({ state: l.dataset.state, text: l.textContent ?? '' }));
+const LIVE = {
+  configured: true,
+  stale: false,
+  fetchedAt: new Date().toISOString(),
+  nodes: [
+    { name: 'atlas', online: true, cpuPct: 12.3, memPct: 25, tempC: 47.3, uptimeS: 360000, guestsRunning: 2 },
+    { name: 'hermes', online: false, cpuPct: 0, memPct: 0, tempC: null, uptimeS: 0, guestsRunning: 0 },
+  ],
+  services: [
+    { name: 'Jellyfin', up: true, uptime24hPct: 99.9 },
+    { name: 'Gitea', up: false, uptime24hPct: 97.1 },
+  ],
+};
+
+await check('homelab: no polling until ~/ is showing, then renders the live table', async () => {
+  statusReply = { status: 200, body: LIVE };
+  statusCalls = 0;
+  await desktop.goto(BASE + '/');
+  await desktop.waitForTimeout(300);
+  expect(statusCalls === 0, `polled from whoami: ${statusCalls}`);
+  await desktop.keyboard.press('5');
+  await desktop.waitForFunction(() => document.querySelector('#homelab')?.dataset.state === 'live');
+  const l = await lab();
+  for (const want of ['atlas', '12.3%', '25%', '47°C', '4d 4h', 'hermes', 'down', 'Jellyfin', '99.9%', 'Gitea', 'updated']) {
+    expect(l.text.includes(want), `missing "${want}" in: ${l.text}`);
+  }
+  expect(statusCalls === 1, `calls ${statusCalls}`);
+});
+
+await check('homelab: stale snapshot says "last seen … lab offline"', async () => {
+  statusReply = { status: 200, body: { ...LIVE, stale: true, fetchedAt: new Date(Date.now() - 3 * 3600_000).toISOString() } };
+  await desktop.goto(BASE + '/~');
+  await desktop.waitForFunction(() => document.querySelector('#homelab')?.dataset.state === 'stale');
+  expect((await lab()).text.includes('last seen 3h ago — lab offline'), (await lab()).text);
+});
+
+await check('homelab: unconfigured and unreachable states', async () => {
+  statusReply = { status: 200, body: { configured: false } };
+  await desktop.goto(BASE + '/~');
+  await desktop.waitForFunction(() => document.querySelector('#homelab')?.dataset.state === 'unconfigured');
+  statusReply = { status: 503, body: { configured: true, error: 'lab unreachable' } };
+  await desktop.goto(BASE + '/~');
+  await desktop.waitForFunction(() => document.querySelector('#homelab')?.dataset.state === 'offline');
+});
+
+statusReply = { status: 200, body: LIVE };
+await desktop.goto(BASE + '/~');
+await desktop.waitForFunction(() => document.querySelector('#homelab')?.dataset.state === 'live');
+await desktop.screenshot({ path: `${OUT}/desktop-1440-homelab.png` });
+await desktop.unroute('**/api/status');
+
 await desktop.goto(BASE + '/');
 await desktop.keyboard.press('/');
 await desktop.keyboard.type('what is Elliott building right now?');

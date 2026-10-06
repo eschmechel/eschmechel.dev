@@ -121,6 +121,79 @@ await check('OpenAI-style responses ({ choices }) are understood', async () => {
   expect(r.answer === 'hi there', JSON.stringify(r));
 });
 
+// ── /api/status ────────────────────────────────────────────────────────
+const { handleStatus, sanitize } = await import('../src/homelab/status.ts');
+const LAB = {
+  generatedAt: '2026-10-06T18:29:50Z',
+  nodes: [{ name: 'atlas', online: true, cpuPct: 12.3, memPct: 25, tempC: 47.3, uptimeS: 360000, guestsRunning: 2 }],
+  services: [{ name: 'Jellyfin', up: true, uptime24hPct: 99.9 }],
+  sources: { proxmox: 'ok' },
+};
+const statusEnv = (extra = {}) => ({ HOMELAB_STATUS_URL: 'https://status.lab.example/status', HOMELAB_ACCESS_CLIENT_ID: 'id', HOMELAB_ACCESS_CLIENT_SECRET: 'sec', AGENT_KV: memoryKV(), ...extra });
+const getReq = new Request('https://eschmechel.dev/api/status');
+function fakeFetch(payload = LAB, status = 200) {
+  const calls = [];
+  const fn = async (url, init) => {
+    calls.push({ url, headers: init?.headers });
+    if (payload === 'throw') throw new Error('down');
+    return new Response(JSON.stringify(payload), { status });
+  };
+  fn.calls = calls;
+  return fn;
+}
+
+await check('status: not configured → 200 {configured:false}, no fetch', async () => {
+  const f = fakeFetch();
+  const r = await body(await handleStatus(getReq, {}, f, NOW));
+  expect(r.status === 200 && r.configured === false && f.calls.length === 0, JSON.stringify(r));
+});
+
+await check('status: fetches through Access with service-token headers', async () => {
+  const f = fakeFetch();
+  const r = await body(await handleStatus(getReq, statusEnv(), f, NOW));
+  expect(r.configured && !r.stale && r.nodes[0].name === 'atlas' && r.services[0].up, JSON.stringify(r));
+  expect(f.calls[0].headers['CF-Access-Client-Id'] === 'id' && f.calls[0].headers['CF-Access-Client-Secret'] === 'sec', 'access headers');
+  expect(!('sources' in r), 'unexpected field passed through');
+});
+
+await check('status: fresh for 60 s from KV, then refetched', async () => {
+  const env = statusEnv();
+  const f = fakeFetch();
+  await handleStatus(getReq, env, f, NOW);
+  await handleStatus(getReq, env, f, new Date(NOW.getTime() + 30_000));
+  expect(f.calls.length === 1, `cached: ${f.calls.length}`);
+  await handleStatus(getReq, env, f, new Date(NOW.getTime() + 61_000));
+  expect(f.calls.length === 2, `refetch: ${f.calls.length}`);
+});
+
+await check('status: lab down → last-seen snapshot marked stale; nothing ever → 503', async () => {
+  const env = statusEnv();
+  await handleStatus(getReq, env, fakeFetch(), NOW);
+  const later = new Date(NOW.getTime() + 3_600_000);
+  const r = await body(await handleStatus(getReq, env, fakeFetch('throw'), later));
+  expect(r.status === 200 && r.stale === true && r.fetchedAt === NOW.toISOString() && r.nodes.length === 1, JSON.stringify(r));
+  const cold = await handleStatus(getReq, statusEnv(), fakeFetch({}, 502), NOW);
+  expect(cold.status === 503, `cold failure ${cold.status}`);
+});
+
+await check('status: allow-list scrubs hostile exporter output', async () => {
+  const s = sanitize({
+    generatedAt: 'not a date',
+    nodes: [{ name: '192.168.1.5', online: 'yes', cpuPct: 900, memPct: -4, tempC: 'hot', uptimeS: 1.9, guestsRunning: 2, ip: '10.0.0.1' }],
+    services: [{ name: 'https://git.home.lan', up: true, uptime24hPct: 250, version: '1.2.3' }, { name: 'grafana.lab.example.com', up: false }],
+    hostname: 'secret-box',
+  });
+  const out = JSON.stringify(s);
+  for (const leak of ['192.168', '10.0.0.1', 'git.home', 'grafana.lab', 'secret-box', '1.2.3']) expect(!out.includes(leak), `leaked ${leak}: ${out}`);
+  expect(s.nodes[0].name === 'node-1' && s.nodes[0].online === false && s.nodes[0].cpuPct === 100 && s.nodes[0].memPct === 0 && s.nodes[0].tempC === null, out);
+  expect(s.services[0].name === 'service-1' && s.services[0].uptime24hPct === 100 && s.services[1].name === 'service-2', out);
+});
+
+await check('status: POST → 405', async () => {
+  const r = await handleStatus(new Request('https://x/api/status', { method: 'POST' }), statusEnv(), fakeFetch(), NOW);
+  expect(r.status === 405, String(r.status));
+});
+
 const passed = results.filter(Boolean).length;
 console.log(`api: ${passed}/${results.length}`);
 process.exit(passed === results.length ? 0 : 1);

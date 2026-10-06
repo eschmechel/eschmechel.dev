@@ -42,6 +42,9 @@ check "rss.xml lists every post" bash -c "[ \$(curl -fs http://127.0.0.1:$PORT/r
 check "sitemap includes posts" bash -c "grep -q '/blog/your-ai-slop-bores-me/' dist/sitemap-0.xml"
 check "agent API logic (mock AI + KV)" node tests/api.check.mjs
 check "Pages Functions bundle" bash -c "npx wrangler pages functions build --outdir \"\${TMPDIR:-/tmp}/eschmechel-fn\" >/dev/null 2>&1"
+if command -v go >/dev/null; then
+  check "homelab exporter: go vet + go test" bash -c "cd homelab-exporter && go vet ./... && go test -count=1 ./..."
+fi
 check "favicon served" curl -fs "http://127.0.0.1:$PORT/favicon.svg"
 check "resume PDF served" bash -c "curl -fsI http://127.0.0.1:$PORT/Elliott-Schmechel-Resume.pdf | grep -qi 'application/pdf'"
 check "project thumbnails optimised" bash -c "ls dist/_astro/*.webp >/dev/null"
