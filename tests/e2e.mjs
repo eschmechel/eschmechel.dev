@@ -187,6 +187,48 @@ await check('resume PDF link + project thumbnails present', async () => {
   expect(thumbs === 3, `loaded thumbnails ${thumbs}`);
 });
 
+await check('thumbnail opens an in-page lightbox (no new tab, no navigation)', async () => {
+  await desktop.goto(BASE + '/projects');
+  const pagesBefore = desktop.context().pages().length;
+  await desktop.click('a[data-lightbox="hermes-apprentice"] >> nth=0');
+  await desktop.waitForFunction(() => document.querySelector('#lightbox')?.open);
+  await desktop.waitForFunction(() => {
+    const i = document.querySelector('#lightbox-img');
+    return i?.complete && i.naturalWidth > 0;
+  });
+  expect(desktop.context().pages().length === pagesBefore, 'a new tab opened');
+  expect((await state(desktop)).path === '/projects', 'page navigated');
+  expect((await desktop.textContent('#lightbox-count')) === '1/2', 'counter');
+});
+
+await check('lightbox: → cycles within the project and wraps; column keys ignored', async () => {
+  await desktop.keyboard.press('ArrowRight');
+  expect((await desktop.textContent('#lightbox-count')) === '2/2', 'next');
+  await desktop.keyboard.press('ArrowRight');
+  expect((await desktop.textContent('#lightbox-count')) === '1/2', 'wrap');
+  await desktop.keyboard.press('3');
+  expect((await state(desktop)).col === 'projects', 'column changed under the modal');
+});
+
+await check('lightbox: Esc closes and returns focus to the thumbnail', async () => {
+  await desktop.keyboard.press('Escape');
+  expect(!(await desktop.$eval('#lightbox', (d) => d.open)), 'still open');
+  expect(await desktop.evaluate(() => document.activeElement?.matches('a[data-lightbox]')), 'focus not restored');
+});
+
+await check('lightbox: backdrop click closes; single image hides prev/next', async () => {
+  await desktop.click('a[data-lightbox="heard"]');
+  await desktop.waitForFunction(() => document.querySelector('#lightbox')?.open);
+  expect(await desktop.$eval('#lightbox-nav', (n) => n.hidden), 'nav shown for one image');
+  await desktop.mouse.click(8, 8);
+  expect(!(await desktop.$eval('#lightbox', (d) => d.open)), 'backdrop click did not close');
+});
+
+await desktop.click('a[data-lightbox="hermes-apprentice"] >> nth=1');
+await desktop.waitForFunction(() => document.querySelector('#lightbox-img')?.naturalWidth > 0);
+await desktop.screenshot({ path: `${OUT}/desktop-1440-lightbox.png` });
+await desktop.keyboard.press('Escape');
+
 for (const [path, id] of routes) {
   await desktop.goto(BASE + path);
   await settle(desktop);

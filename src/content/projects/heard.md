@@ -5,7 +5,7 @@ order: 1
 when: Oct 2026
 status:
   - { text: 'Hackathon · StormHacks 2026', tone: accent }
-  - { text: 'Team of 5', tone: muted }
+  - { text: 'Team of 4', tone: muted }
 tech: [TypeScript, React, Python, FastAPI, PyTorch, ONNX Runtime Web, MediaPipe, ElevenLabs, RunPod, Hugging Face]
 links:
   - { label: site, href: 'https://tryheard.tech' }

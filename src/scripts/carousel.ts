@@ -89,6 +89,7 @@ export function initCarousel(): void {
 
   document.addEventListener('keydown', (e) => {
     if (e.defaultPrevented || e.metaKey || e.ctrlKey || e.altKey) return;
+    if (document.querySelector('dialog[open]')) return; // a modal owns the keyboard
     if ((e.target as Element | null)?.closest?.(TYPING)) return;
 
     const key = e.key;

@@ -13,6 +13,7 @@ import Projects from '../components/columns/Projects.astro';
 import Resume from '../components/columns/Resume.astro';
 import Blog from '../components/columns/Blog.astro';
 import Home from '../components/columns/Home.astro';
+import Lightbox from '../components/Lightbox.astro';
 
 interface Props {
   initial: ColumnId;
@@ -88,6 +89,8 @@ await reportUnverified();
         }
       </div>
     </main>
+
+    <Lightbox />
 
     <footer class="chrome chrome--bottom">
       <Panel label="footer" as="div">

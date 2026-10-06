@@ -4,6 +4,7 @@ handle: eschmechel
 headline: Systems-focused builder — GPU training infra, self-training agents, real-time edge apps.
 facts:
   - { icon: '</>', text: 'Volunteer fullstack @ UNAC-Vancouver' }
+  - { icon: '⌘', text: 'VP @ Langara Computer Science Club' }
   - { icon: '◇', text: 'CS @ Langara · grad May 2027' }
   - { icon: '⌖', text: 'Vancouver, BC' }
 socials:
