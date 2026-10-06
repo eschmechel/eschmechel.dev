@@ -59,7 +59,15 @@ See [`homelab-exporter/README.md`](../homelab-exporter/README.md) for the export
 
 Until those are set, the `~/` homelab panel shows "not wired up yet" rather than erroring.
 
-## 4. After launch (Phase 9 — ask first)
+## 4. Daily rebuild (keeps the GitHub heatmap fresh)
+
+1. Pages project → Settings → Builds → **Deploy hooks** → add one for the production branch.
+2. GitHub repo → Settings → Secrets → Actions → `PAGES_DEPLOY_HOOK` = that URL.
+3. `.github/workflows/daily-rebuild.yml` then pings it at 09:17 UTC. **GitHub only runs scheduled
+   workflows from the default branch**, so this starts working once `portfolio-v3` is the repo's
+   default branch (or the workflow file is copied to `main`) — decide at launch.
+
+## 5. After launch (Phase 9 — ask first)
 
 - Flip dev.to `canonical_url` on each imported post to `https://eschmechel.dev/blog/<slug>`.
 - Cloudflare Web Analytics (D49).

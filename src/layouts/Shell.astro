@@ -21,6 +21,7 @@ const body = { whoami: Whoami, projects: Projects, resume: Resume, blog: Blog, h
 <Base title={column.title} path={column.href} active={index} keysLeft="[1-5 column · ←/→ h/l scroll]" keysRight="[↑/↓ j/k panel · / ask]">
   <CommandBar slot="companion" />
   <main class="viewport" id="viewport">
+    <h1 class="sr-only">{column.title}</h1>
     <div class="track" id="track" style={`--i:${index}`} data-active={index}>
       {
         COLUMNS.map((c, i) => {

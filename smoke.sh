@@ -45,6 +45,8 @@ check "Pages Functions bundle" bash -c "npx wrangler pages functions build --out
 if command -v go >/dev/null; then
   check "homelab exporter: go vet + go test" bash -c "cd homelab-exporter && go vet ./... && go test -count=1 ./..."
 fi
+check "robots.txt + og.png + 404 page" bash -c "curl -fs http://127.0.0.1:$PORT/robots.txt | grep -q sitemap-index && curl -fsI http://127.0.0.1:$PORT/og.png | grep -qi image/png && grep -q 'no such file or directory' dist/404.html"
+check "every column page has an <h1> and og:image" bash -c "for f in dist/index.html dist/*/index.html; do grep -q '<h1' \$f && grep -q 'og:image\" content=\"https://eschmechel.dev/og.png' \$f || exit 1; done"
 check "favicon served" curl -fs "http://127.0.0.1:$PORT/favicon.svg"
 check "resume PDF served" bash -c "curl -fsI http://127.0.0.1:$PORT/Elliott-Schmechel-Resume.pdf | grep -qi 'application/pdf'"
 check "project thumbnails optimised" bash -c "ls dist/_astro/*.webp >/dev/null"

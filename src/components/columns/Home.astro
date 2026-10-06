@@ -1,8 +1,10 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Panel from '../Panel.astro';
+import { getContributions } from '../../lib/github';
 
 const now = await getCollection('now');
+const contrib = await getContributions();
 const opinions = await Promise.all(
   (await getCollection('opinions')).map(async (o) => ({ ...o, Body: (await render(o)).Content })),
 );
@@ -43,8 +45,32 @@ const opinions = await Promise.all(
 </script>
 
 <Panel label="contributions">
-  <p class="dim">GitHub activity heatmap — later phase.</p>
+  {
+    contrib ? (
+      <>
+        <a class="gh" href="https://github.com/eschmechel" target="_blank" rel="noopener">github ↗</a>
+        <div
+          class="heatmap"
+          id="heatmap"
+          data-days={contrib.levels}
+          data-start={contrib.start}
+          role="img"
+          aria-label={`${contrib.total.toLocaleString('en-CA')} GitHub contributions in the last year`}
+        />
+        <p class="dim">{contrib.total.toLocaleString('en-CA')} contributions in the last year</p>
+      </>
+    ) : (
+      <p class="dim">
+        Contribution graph unavailable at build time — see <a href="https://github.com/eschmechel">github.com/eschmechel</a>.
+      </p>
+    )
+  }
 </Panel>
+
+<script>
+  import { initHeatmap } from '../../scripts/heatmap';
+  initHeatmap();
+</script>
 
 {
   opinions.map(({ data: o, Body }) => (
@@ -111,6 +137,46 @@ const opinions = await Promise.all(
   }
   .lab[data-state='stale'] :global(.lab__note:last-child) {
     color: var(--warn);
+  }
+  .gh {
+    position: absolute;
+    top: 0;
+    right: 0.75rem;
+    transform: translateY(-55%);
+    padding: 0 0.4rem;
+    background: var(--bg);
+    font-size: var(--fs-sm);
+    line-height: 1;
+    color: var(--accent);
+  }
+  .heatmap {
+    overflow-x: auto;
+    padding-bottom: 0.4rem;
+  }
+  /* cells are created by src/scripts/heatmap.ts */
+  .heatmap :global(.heat) {
+    display: grid;
+    grid-template-rows: repeat(7, 9px);
+    grid-auto-flow: column;
+    grid-auto-columns: 9px;
+    gap: 2px;
+    width: max-content;
+  }
+  .heatmap :global(.heat i) {
+    border-radius: 2px;
+    background: var(--border);
+  }
+  .heatmap :global(.heat .l1) {
+    background: rgb(242 169 59 / 0.3);
+  }
+  .heatmap :global(.heat .l2) {
+    background: rgb(242 169 59 / 0.52);
+  }
+  .heatmap :global(.heat .l3) {
+    background: rgb(242 169 59 / 0.76);
+  }
+  .heatmap :global(.heat .l4) {
+    background: var(--accent);
   }
   .now li {
     display: flex;

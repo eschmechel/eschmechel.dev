@@ -6,7 +6,7 @@
   --bg-raised: #141210;
   --fg: #9c968c;
   --fg-strong: #ddd6c8;
-  --fg-dim: #6b665e;
+  --fg-dim: #857f75; /* 4.9:1 on --bg (WCAG AA) */
   --border: #36322d;
   --border-strong: #4d4740;
   --accent: #f2a93b;

@@ -1,0 +1,18 @@
+# Rebuilds the site once a day so the GitHub heatmap (fetched at build time) stays fresh.
+# Setup: Pages project → Settings → Builds → Deploy hooks → create one for portfolio-v3,
+# then add it as the repo secret PAGES_DEPLOY_HOOK. Without the secret this job is a no-op.
+name: daily rebuild
+on:
+  schedule:
+    - cron: '17 9 * * *' # 09:17 UTC daily
+  workflow_dispatch:
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - name: trigger Pages deploy hook
+        env:
+          HOOK: ${{ secrets.PAGES_DEPLOY_HOOK }}
+        run: |
+          if [ -z "$HOOK" ]; then echo "PAGES_DEPLOY_HOOK not set — skipping"; exit 0; fi
+          curl -fsS -X POST "$HOOK" > /dev/null && echo "deploy triggered"

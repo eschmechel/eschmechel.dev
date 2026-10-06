@@ -354,6 +354,13 @@ await check('cmd: :open <post> navigates to the post', async () => {
 });
 await bar.unroute('**/api/chat');
 
+await check('heatmap: one cell per day (+ week padding), drawn client-side', async () => {
+  await desktop.goto(BASE + '/~');
+  const m = await desktop.$eval('#heatmap', (h) => ({ cells: h.querySelectorAll('.heat i').length, days: h.dataset.days.length, start: h.dataset.start }));
+  const lead = new Date(`${m.start}T00:00:00Z`).getUTCDay();
+  expect(m.days > 300 && m.cells === m.days + lead, JSON.stringify(m));
+});
+
 // ── homelab panel (phase 8) ──────────────────────────────────────────
 let statusReply = { status: 200, body: { configured: false } };
 let statusCalls = 0;

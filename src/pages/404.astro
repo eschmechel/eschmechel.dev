@@ -1,0 +1,65 @@
+---
+import Base from '../layouts/Base.astro';
+import Panel from '../components/Panel.astro';
+import { COLUMNS } from '../data/columns';
+---
+
+<Base title="404 · Elliott Schmechel" path="/404" active={-1} keysLeft="[1-5 column]" keysRight="[nothing here]">
+  <main class="lost">
+    <h1 class="sr-only">Page not found</h1>
+    <Panel label="404" as="div">
+      <pre class="tiger" aria-hidden="true"> /\=/\  ?
+(=o.o=)~</pre>
+      <p class="msg"><span class="err">bash: no such file or directory</span></p>
+      <p>The tiger looked everywhere. Try one of these:</p>
+      <ul class="ls">
+        {
+          COLUMNS.map((c) => (
+            <li>
+              <a href={c.href}>
+                [{c.key}] {c.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </Panel>
+  </main>
+
+  <script>
+    // same number keys as everywhere else
+    document.addEventListener('keydown', (e) => {
+      const link = document.querySelectorAll<HTMLAnchorElement>('.ls a')[Number(e.key) - 1];
+      if (link && !e.metaKey && !e.ctrlKey && !e.altKey) location.href = link.href;
+    });
+  </script>
+</Base>
+
+<style>
+  .lost {
+    position: fixed;
+    inset: var(--chrome-top) 0 var(--chrome-bottom) 0;
+    display: grid;
+    place-items: center;
+  }
+  .lost :global(.panel) {
+    width: min(30rem, calc(100vw - 2rem));
+  }
+  .tiger {
+    margin: 0 0 1rem;
+    font: 0.9rem/1 var(--font);
+    color: var(--accent);
+  }
+  .err {
+    color: var(--warn);
+  }
+  .msg {
+    margin-bottom: 0.4rem;
+  }
+  .ls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.4rem;
+    margin-top: 0.8rem;
+  }
+</style>
