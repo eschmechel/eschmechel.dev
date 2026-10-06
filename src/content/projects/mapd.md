@@ -8,6 +8,7 @@ status:
 tech: [FastAPI, Cloudflare Workers]
 links:
   - { label: repo, href: 'https://github.com/LMSAIH/StormHacks2025' }
+  - { label: devpost, href: 'https://devpost.com/software/mapd-urban-development-intelligence' }
 verified: false
 source: main branch experiences.ts (2025)
 ---

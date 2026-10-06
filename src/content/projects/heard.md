@@ -10,11 +10,12 @@ tech: [TypeScript, React, Python, FastAPI, PyTorch, ONNX Runtime Web, MediaPipe,
 links:
   - { label: site, href: 'https://tryheard.tech' }
   - { label: repo, href: 'https://github.com/LMSAIH/stormhacks2026' }
+  - { label: devpost, href: 'https://devpost.com/software/heard-37hzow' }
 highlights:
   - Built the on-device lip-reading pipeline — ported Auto-AVSR to ONNX and quantized it to int8 (775 MB → 203 MB), running in the browser via onnxruntime-web with face tracking in a Web Worker
   - Built the FastAPI GPU inference service on RunPod (beam search + language model, top-3 readings) and the opt-in training-pair intake
 images:
-  - { src: '../../assets/projects/heard-landing.png', alt: 'heard landing page — Everyone deserves to be heard.' }
+  - { src: '../../assets/projects/heard-landing.webp', alt: 'heard landing page — "Everyone deserves to be heard."' }
 verified: false
 source: repo analysis of ~/Repos/stormhacks2026 + tryheard.tech (not on a resume yet)
 ---

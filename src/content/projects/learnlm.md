@@ -6,11 +6,16 @@ when: Jan 2026
 status:
   - { text: 'Best Use of SFUCoursesAPI · XHacks 2026', tone: win }
 tech: [TypeScript, Hono, Cloudflare Workers, D1, Vectorize, Durable Objects, Deepgram, React]
-links: []
+links:
+  - { label: devpost, href: 'https://devpost.com/software/learn-lm' }
 highlights:
   - Built the serverless backend on Cloudflare Workers — 66% of commits — across 6 D1 tables, 3-tier rate limiting, and a Vectorize RAG pipeline indexing 998 SFU courses
   - Built an MCP server exposing 21 tools, integrated with VS Code, Cursor and Claude Desktop
   - Real-time voice tutoring over WebSocket Durable Objects with Deepgram STT/TTS and Llama 3.1 8B at the edge
+images:
+  - { src: '../../assets/projects/learnlm-landing.webp', alt: 'LearnLM landing — "Learn from History''s Greatest Minds"' }
+  - { src: '../../assets/projects/learnlm-tutors.webp', alt: 'Choosing a historical tutor for an SFU course' }
+  - { src: '../../assets/projects/learnlm-courses.webp', alt: 'Browsing SFU courses' }
 verified: true
 source: HTN resume (2026-07)
 ---

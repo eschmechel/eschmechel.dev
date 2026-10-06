@@ -184,7 +184,7 @@ await check('resume PDF link + project thumbnails present', async () => {
   expect((await fetch(BASE + href)).headers.get('content-type')?.includes('pdf'), 'pdf');
   await desktop.goto(BASE + '/projects');
   const thumbs = await desktop.$$eval('.thumb img', (imgs) => imgs.filter((i) => i.complete && i.naturalWidth > 0).length);
-  expect(thumbs === 3, `loaded thumbnails ${thumbs}`);
+  expect(thumbs === 11, `loaded thumbnails ${thumbs}`);
 });
 
 await check('thumbnail opens an in-page lightbox (no new tab, no navigation)', async () => {
@@ -198,14 +198,15 @@ await check('thumbnail opens an in-page lightbox (no new tab, no navigation)', a
   });
   expect(desktop.context().pages().length === pagesBefore, 'a new tab opened');
   expect((await state(desktop)).path === '/projects', 'page navigated');
-  expect((await desktop.textContent('#lightbox-count')) === '1/2', 'counter');
+  expect((await desktop.textContent('#lightbox-count')) === '1/3', 'counter');
 });
 
 await check('lightbox: → cycles within the project and wraps; column keys ignored', async () => {
   await desktop.keyboard.press('ArrowRight');
-  expect((await desktop.textContent('#lightbox-count')) === '2/2', 'next');
-  await desktop.keyboard.press('ArrowRight');
-  expect((await desktop.textContent('#lightbox-count')) === '1/2', 'wrap');
+  expect((await desktop.textContent('#lightbox-count')) === '2/3', 'next');
+  await desktop.keyboard.press('ArrowLeft');
+  await desktop.keyboard.press('ArrowLeft');
+  expect((await desktop.textContent('#lightbox-count')) === '3/3', 'wrap backwards');
   await desktop.keyboard.press('3');
   expect((await state(desktop)).col === 'projects', 'column changed under the modal');
 });
