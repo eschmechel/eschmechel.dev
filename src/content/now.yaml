@@ -1,10 +1,10 @@
 - id: building
   label: building
   text: this site, v3
-  verified: false
-  source: drafted by Claude
+  verified: true
+  source: drafted by Claude, confirmed by user 2026-10-06
 - id: studying
   label: studying
   text: final year of CS at Langara
-  verified: false
-  source: drafted by Claude
+  verified: true
+  source: drafted by Claude, confirmed by user 2026-10-06

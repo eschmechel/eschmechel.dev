@@ -184,7 +184,7 @@ await check('resume PDF link + project thumbnails present', async () => {
   expect((await fetch(BASE + href)).headers.get('content-type')?.includes('pdf'), 'pdf');
   await desktop.goto(BASE + '/projects');
   const thumbs = await desktop.$$eval('.thumb img', (imgs) => imgs.filter((i) => i.complete && i.naturalWidth > 0).length);
-  expect(thumbs === 11, `loaded thumbnails ${thumbs}`);
+  expect(thumbs === 14, `loaded thumbnails ${thumbs}`);
 });
 
 await check('thumbnail opens an in-page lightbox (no new tab, no navigation)', async () => {

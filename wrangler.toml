@@ -1,6 +1,6 @@
 # Cloudflare Pages project config. With this file present, bindings below are the source of truth
 # (dashboard binding edits are ignored). See docs/DEPLOY.md.
-name = "eschmechel-dev"
+name = "eschmechel-v3"   # NOT eschmechel-dev — that project serves the live v1 site
 pages_build_output_dir = "dist"
 compatibility_date = "2026-10-01"
 

@@ -1,6 +1,6 @@
 ---
 title: "Skills are Prompts. Here's how Hermes Apprentice turns them into weights"
-description: "This is a submission for the Hermes Agent Challenge What I Built It's 2 AM and Telegram..."
+description: "This is a submission for the Hermes Agent Challenge."
 pubDate: 2026-05-29
 tags: ["hermesagentchallenge", "devchallenge", "agents", "ai"]
 devto:

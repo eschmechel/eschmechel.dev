@@ -6,6 +6,6 @@ start: 2026-05-01
 end: 2026-05-31
 bullets:
   - Supported event operations across registration, data analytics and attendee support
-verified: false
-source: main branch experiences.ts
+verified: true
+source: main branch + confirmed by user 2026-10-06
 ---

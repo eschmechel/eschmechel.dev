@@ -4,7 +4,9 @@ org: Langara Computer Science Club
 where: Langara College
 start: 2026-09-01
 bullets:
-  - Help run the club's events and community for Langara CS students
-verified: false
-source: user chat 2026-10-06 — role + Sep 2026 start confirmed; bullet is a placeholder
+  - Help manage the club's events and day-to-day operations
+  - Leading the club website redesign
+  - Building a universal post-secondary Discord bot
+verified: true
+source: confirmed by user 2026-10-06
 ---

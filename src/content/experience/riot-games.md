@@ -6,6 +6,6 @@ start: 2024-09-01
 end: 2025-01-31
 bullets:
   - Tested features and updates to surface bugs and performance regressions before release
-verified: false
-source: main branch experiences.ts
+verified: true
+source: main branch + confirmed by user 2026-10-06
 ---

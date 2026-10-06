@@ -13,8 +13,8 @@ socials:
   - { label: LinkedIn, href: 'https://linkedin.com/in/eschmechel' }
   - { label: dev.to, href: 'https://dev.to/eschmechel' }
 resumePdf: /Elliott-Schmechel-Resume.pdf
-verified: false
-source: headline+facts confirmed in interview (D50, D29, D36); about text drafted by Claude
+verified: true
+source: interview D50/D29/D36; about drafted by Claude, confirmed by user 2026-10-06
 ---
 
 I ship end to end across Go, C++, TypeScript and Python — from GPU training infrastructure and

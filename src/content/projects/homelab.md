@@ -1,7 +1,7 @@
 ---
 name: homelab
 tier: featured
-order: 6
+order: 7
 when: ongoing
 status:
   - { text: 'Ongoing', tone: warn }

@@ -16,8 +16,8 @@ highlights:
   - Built the FastAPI GPU inference service on RunPod (beam search + language model, top-3 readings) and the opt-in training-pair intake
 images:
   - { src: '../../assets/projects/heard-landing.webp', alt: 'heard landing page — "Everyone deserves to be heard."' }
-verified: false
-source: repo analysis of ~/Repos/stormhacks2026 + tryheard.tech (not on a resume yet)
+verified: true
+source: repo analysis + confirmed by user 2026-10-06
 ---
 
 An assistive silent-speech app: mouth your words at a webcam and heard reads your lips and speaks
