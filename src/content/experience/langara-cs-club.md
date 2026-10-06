@@ -6,5 +6,5 @@ start: 2026-09-01
 bullets:
   - Help run the club's events and community for Langara CS students
 verified: false
-source: user chat 2026-10-06 ("now the vice president"); start date + bullet are placeholders
+source: user chat 2026-10-06 — role + Sep 2026 start confirmed; bullet is a placeholder
 ---

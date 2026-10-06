@@ -1,7 +1,8 @@
 ---
-import '@fontsource/ibm-plex-mono/400.css';
-import '@fontsource/ibm-plex-mono/500.css';
-import '@fontsource/ibm-plex-mono/600.css';
+// Latin subset only, two weights: keeps inlined CSS small enough for the 14 KB first flight.
+import '@fontsource/ibm-plex-mono/latin-400.css';
+import '@fontsource/ibm-plex-mono/latin-600.css';
+import plexRegular from '@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2?url';
 import '../styles/tokens.css';
 import '../styles/base.css';
 import { execSync } from 'node:child_process';
@@ -44,6 +45,7 @@ await reportUnverified();
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{column.title}</title>
     <meta name="description" content={`${profile.name} — ${profile.headline}`} />
+    <link rel="preload" href={plexRegular} as="font" type="font/woff2" crossorigin />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={new URL(column.href, Astro.site)} />
   </head>
