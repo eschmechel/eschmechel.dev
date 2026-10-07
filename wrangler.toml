@@ -33,5 +33,5 @@ id = "b2d01fb747ae4189919da0ed3246f940"
 [vars]
 AGENT_HOURLY_LIMIT = "20"     # model answers per IP per hour (cache hits are free)
 AGENT_DAILY_NEURONS = "9000"  # stays under the 10k/day free Workers AI allocation
-HOMELAB_STATUS_URL = ""       # e.g. https://status.lab.eschmechel.dev/status (behind Cloudflare Access)
+HOMELAB_STATUS_URL = "https://lab-status.eschmechel.dev/status"  # behind Cloudflare Access (service token)
 # Secrets (not here): npx wrangler secret put HOMELAB_ACCESS_CLIENT_ID / HOMELAB_ACCESS_CLIENT_SECRET

@@ -45,17 +45,24 @@ real Workers runtime locally (the AI binding is always remote, so real questions
 
 See [`homelab-exporter/README.md`](../homelab-exporter/README.md) for the exporter itself. Then:
 
-1. Run the exporter on the lab, listening on `127.0.0.1:9477` only.
-2. Cloudflare Tunnel: `cloudflared tunnel create lab-status`, route `status.lab.eschmechel.dev` →
-   `http://127.0.0.1:9477`.
-3. Zero Trust → Access → Applications → self-hosted app for `status.lab.eschmechel.dev`, policy
-   **Service Auth** only. Create a **service token** for it.
-4. Give the token to the Worker and point it at the tunnel:
+Hostname is `lab-status.eschmechel.dev` — one level deep, so the free Universal SSL cert covers it
+(`status.lab.eschmechel.dev` would need Advanced Certificate Manager).
+
+1. Proxmox: a read-only `PVEAuditor` API token (exporter README, "Proxmox token").
+2. Zero Trust → Networks → Tunnels → **Create** (cloudflared) `homelab-status`, environment Docker;
+   copy the token into the exporter's `.env` as `TUNNEL_TOKEN`. Public hostname:
+   `lab-status.eschmechel.dev` → service `HTTP` · `exporter:9477`.
+3. On the Docker host, in `homelab-exporter/`: fill `.env`, then `docker compose up -d --build`.
+   The tunnel shows **Healthy** in the dashboard once cloudflared connects.
+4. Zero Trust → Access → **Service credentials** → create service token `eschmechel-site` (copy the
+   ID + secret — shown once). Then Access → Applications → **self-hosted** app for
+   `lab-status.eschmechel.dev`, one policy, action **Service Auth**, include that service token.
+5. Give the token to the Worker and point it at the tunnel:
 
    ```sh
    npx wrangler secret put HOMELAB_ACCESS_CLIENT_ID
    npx wrangler secret put HOMELAB_ACCESS_CLIENT_SECRET
-   # wrangler.toml [vars]: HOMELAB_STATUS_URL = "https://status.lab.eschmechel.dev/status"
+   # wrangler.toml [vars]: HOMELAB_STATUS_URL = "https://lab-status.eschmechel.dev/status"
    ```
 
 Until those are set, the `~/` homelab panel shows "not wired up yet" rather than erroring.

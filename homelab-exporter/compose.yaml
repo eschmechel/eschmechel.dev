@@ -1,0 +1,34 @@
+# Exporter + its own cloudflared tunnel (Q15 B / Q16 A). Nothing is published on the host:
+# cloudflared reaches the exporter over the private `lab-status` network, and Cloudflare Access
+# (service token) fronts lab-status.eschmechel.dev.
+#
+#   cp .env.example .env    # fill in PROXMOX_*, ALIASES and TUNNEL_TOKEN
+#   docker compose up -d --build
+#   docker compose logs -f                              # no shell in the image; logs are the window
+#   curl -H "CF-Access-Client-Id: …" -H "CF-Access-Client-Secret: …" https://lab-status.eschmechel.dev/status
+services:
+  exporter:
+    build: .
+    env_file: .env
+    environment:
+      LISTEN: 0.0.0.0:9477 # inside the private network only — no `ports:` on purpose
+    networks: [lab-status]
+    restart: unless-stopped
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    command: tunnel --no-autoupdate run
+    environment:
+      TUNNEL_TOKEN: ${TUNNEL_TOKEN:?set TUNNEL_TOKEN in .env}
+    networks: [lab-status]
+    depends_on: [exporter]
+    restart: unless-stopped
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+
+networks:
+  lab-status: {}

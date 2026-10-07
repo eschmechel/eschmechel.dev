@@ -4,6 +4,7 @@ dist/
 .wrangler/
 .env
 .env.*
+!.env.example
 .dev.vars
 .playwright-mcp/
 .artifacts/
