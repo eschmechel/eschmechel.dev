@@ -1,8 +1,9 @@
-# Exporter + its own cloudflared tunnel (Q15 B / Q16 A). Nothing is published on the host:
-# cloudflared reaches the exporter over the private `lab-status` network, and Cloudflare Access
-# (service token) fronts lab-status.eschmechel.dev.
+# Exporter + its own cloudflared tunnel (Q15 B / Q16 A) + Uptime Kuma (Q21 A). cloudflared reaches
+# the exporter over the private `lab-status` network, and Cloudflare Access (service token) fronts
+# lab-status.eschmechel.dev. Only Kuma's admin UI is published, and only on the lab host itself
+# (KUMA_LISTEN, LAN/tailnet — never tunnelled); the exporter reads just Kuma's *public* status page.
 #
-#   cp .env.example .env    # fill in PROXMOX_*, ALIASES and TUNNEL_TOKEN
+#   cp .env.example .env    # fill in PROXMOX_*, ALIASES, TUNNEL_TOKEN (+ KUMA_LISTEN, KUMA_SLUG)
 #   docker compose up -d --build
 #   docker compose logs -f                              # no shell in the image; logs are the window
 #   curl -H "CF-Access-Client-Id: …" -H "CF-Access-Client-Secret: …" https://lab-status.eschmechel.dev/status
@@ -12,6 +13,7 @@ services:
     env_file: .env
     environment:
       LISTEN: 0.0.0.0:9477 # inside the private network only — no `ports:` on purpose
+      KUMA_URL: http://uptime-kuma:3001
     networks: [lab-status]
     restart: unless-stopped
     read_only: true
@@ -30,5 +32,18 @@ services:
     cap_drop: [ALL]
     security_opt: [no-new-privileges:true]
 
+  uptime-kuma:
+    image: louislam/uptime-kuma:2.5.5
+    ports:
+      - ${KUMA_LISTEN:-127.0.0.1}:3002:3001 # admin UI; 3001 on the host is taken by Grafana
+    volumes:
+      - kuma-data:/app/data
+    networks: [lab-status]
+    restart: unless-stopped
+    security_opt: [no-new-privileges:true]
+
 networks:
   lab-status: {}
+
+volumes:
+  kuma-data: {}
