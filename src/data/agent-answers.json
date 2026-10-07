@@ -1,6 +1,12 @@
 {
-  "hash": "",
-  "model": "",
-  "generatedAt": "",
-  "answers": {}
+  "hash": "13019dce7bfa176e",
+  "model": "@cf/meta/llama-3.1-8b-instruct-fp8-fast",
+  "generatedAt": "2026-10-07T07:44:41.350Z",
+  "answers": {
+    "What is Elliott building right now?": "Elliott is currently building the Langara CS Club website redesign and a universal post-secondary Discord bot. He is also in his final year of studying Computer Science at Langara.",
+    "Tell me about Heard.": "Heard is an assistive silent-speech app built by Elliott for StormHacks 2026. It reads lips from a webcam and speaks for the user, then turns everyone else's speech into live, speaker-labelled captions. Elliott built the on-device lip-reading pipeline using Auto-AVSR, porting it to ONNX and quantizing it to int8, which reduced the model size from 775 MB to 203 MB. He also built a FastAPI GPU inference service on RunPod for beam search and language model, and an opt-in training-pair intake.\n\nThe tech stack for Heard includes TypeScript, React, Python, FastAPI, PyTorch, ONNX Runtime Web, MediaPipe, ElevenLabs, RunPod, and Hugging Face. You can find more details about Heard on its GitHub repository (https://github.com/LMSAIH/stormhacks2026) and its Devpost page (https://devpost.com/software/heard-37hzow).",
+    "What does Hermes Apprentice do?": "Elliott's project, Hermes Apprentice, is a second learning loop for the Hermes Agent. It identifies patterns the agent keeps handling, fine-tunes a small specialist on them, validates it against regression testing for continued learning, and routes future matches to a free local endpoint.",
+    "What's his strongest backend work?": "Elliott's strongest backend work appears to be his work on FastAPI, particularly in projects like \"mapd\" (StormHacks 2025) and \"dataforall\" (HTC 2026). He also has experience with other backend frameworks such as Hono and Cloudflare Workers.",
+    "How do I get in touch?": "You can reach Elliott through his email address: elliottschmechel@gmail.com."
+  }
 }
