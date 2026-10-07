@@ -25,5 +25,5 @@ jobs:
       - run: npm ci
       - run: npm run build
       - run: npm run agent:pregen # no-op when answers already match the content hash
-      - run: ./smoke.sh # rebuilds with the fresh answers, then checks the built site
+      - run: bash smoke.sh # rebuilds with the fresh answers, then checks the built site
       - run: npx wrangler deploy --message "daily deploy ${GITHUB_SHA::7}"
