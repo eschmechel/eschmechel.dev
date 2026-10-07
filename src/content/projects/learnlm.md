@@ -7,6 +7,7 @@ status:
   - { text: 'Best Use of SFUCoursesAPI · XHacks 2026', tone: win }
 tech: [TypeScript, Hono, Cloudflare Workers, D1, Vectorize, Durable Objects, Deepgram, React]
 links:
+  - { label: repo, href: 'https://github.com/LMSAIH/xhacks2026' }
   - { label: devpost, href: 'https://devpost.com/software/learn-lm' }
 highlights:
   - Built the serverless backend on Cloudflare Workers — 66% of commits — across 6 D1 tables, 3-tier rate limiting, and a Vectorize RAG pipeline indexing 998 SFU courses
@@ -20,4 +21,4 @@ verified: true
 source: HTN resume (2026-07)
 ---
 
-An AI tutoring platform for SFU students, built at XHacks 2026.
+An AI tutoring platform for SFU students, built at XHacks 2026. Founded on real student course data fromSFUCoursesAPI, I built the RAG pipeline behind the project enabling our interactive tutors to source their info and data in actual sfu courses.

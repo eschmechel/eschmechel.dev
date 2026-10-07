@@ -9,7 +9,7 @@ status:
 tech: [Go, Python, Unsloth, vLLM, ONNX, Prometheus, Grafana]
 links:
   - { label: repo, href: 'https://github.com/eschmechel/hermes-apprentice' }
-  - { label: writeup, href: 'https://dev.to/eschmechel/skills-are-prompts-heres-how-hermes-apprentice-turns-them-into-weights-59eh' }
+  - { label: writeup, href: '/blog/skills-are-prompts-heres-how-hermes-apprentice-turns-them-into-weights' }
   - { label: devpost, href: 'https://devpost.com/software/hermes-apprentice' }
 highlights:
   - Cut recurring agent inference from multi-second upstream API calls to ~38 ms p50 local latency by distilling matured task patterns into 18 MB QLoRA specialists served on vLLM
@@ -24,4 +24,4 @@ source: HTN resume (2026-07) + dev.to writeup
 ---
 
 A second learning loop for Hermes Agent: it spots patterns the agent keeps handling, fine-tunes a
-small specialist on them, validates it, and routes future matches to a free local endpoint.
+small specialist on them, validates it against regression testing for continued learning, and routes future matches to a free local endpoint.

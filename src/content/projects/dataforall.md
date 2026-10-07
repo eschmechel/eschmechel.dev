@@ -8,6 +8,7 @@ status:
   - { text: 'Infrastructure lead', tone: muted }
 tech: [Python, FastAPI, Kubernetes, Docker, Lambda Labs, PostgreSQL, S3]
 links:
+  - { label: repo, href: 'https://github.com/LMSAIH/htc2026' }
   - { label: devpost, href: 'https://devpost.com/software/data-for-all' }
 highlights:
   - Scaled a distributed training backend to 4 Kubernetes replicas with secrets management, a container registry and multi-region load balancing; provisioned H100s via the Lambda Labs API
@@ -19,4 +20,4 @@ verified: true
 source: HTN resume (2026-07)
 ---
 
-A distributed GPU training platform, where I led the infrastructure.
+A distributed GPU training platform, where I led the infrastructure. Crowdsourcing the ability to submit, annotate, and train on opensource datasets.

@@ -8,6 +8,7 @@ status:
   - { text: 'Solo', tone: muted }
 tech: [TypeScript, Hono, Drizzle, D1, Leaflet]
 links:
+  - { label: repo, href: 'https://github.com/eschmechel/beepd' }
   - { label: devpost, href: 'https://devpost.com/software/beepd' }
 highlights:
   - Solo-built in 12 hours — 6 Drizzle/D1 tables with indexed geospatial queries using the Haversine formula
@@ -19,4 +20,4 @@ verified: true
 source: HTN resume (2026-07)
 ---
 
-A real-time proximity radar for finding friends nearby.
+A real-time proximity radar for finding friends nearby. A privacy-focused alternative to Snapchat map or Find My Iphone.
