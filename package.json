@@ -8,6 +8,7 @@
     "preview": "astro preview",
     "check:e2e": "node tests/e2e.mjs",
     "sync:devto": "node scripts/sync-devto.ts",
+    "devto:canonical": "node --env-file-if-exists=.env scripts/devto-canonical.ts",
     "agent:pregen": "node scripts/pregen-answers.ts",
     "check:api": "node tests/api.check.mjs"
   },
