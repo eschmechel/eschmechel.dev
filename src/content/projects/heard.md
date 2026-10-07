@@ -8,7 +8,6 @@ status:
   - { text: 'Team of 4', tone: muted }
 tech: [TypeScript, React, Python, FastAPI, PyTorch, ONNX Runtime Web, MediaPipe, ElevenLabs, RunPod, Hugging Face]
 links:
-  - { label: site, href: 'https://tryheard.tech' }
   - { label: repo, href: 'https://github.com/LMSAIH/stormhacks2026' }
   - { label: devpost, href: 'https://devpost.com/software/heard-37hzow' }
 highlights:
