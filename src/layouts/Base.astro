@@ -24,7 +24,8 @@ interface Props {
 const { title, description, path, active, keysLeft, keysRight, type = 'website' } = Astro.props;
 
 function commitHash(): string {
-  const sha = import.meta.env.CF_PAGES_COMMIT_SHA ?? process.env.CF_PAGES_COMMIT_SHA;
+  // Workers Builds injects WORKERS_CI_COMMIT_SHA (Pages used CF_PAGES_COMMIT_SHA)
+  const sha = process.env.WORKERS_CI_COMMIT_SHA ?? process.env.CF_PAGES_COMMIT_SHA;
   if (sha) return sha.slice(0, 7);
   try {
     return execSync('git rev-parse --short HEAD', { stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim();

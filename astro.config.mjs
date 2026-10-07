@@ -5,7 +5,7 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://eschmechel.dev',
   output: 'static',
-  trailingSlash: 'ignore',
+  trailingSlash: 'never', // matches wrangler.toml html_handling = drop-trailing-slash
   // CSS is inlined so one HTML response (≤14 KB gzipped) can paint the page — see tests/budget.check.mjs
   build: { format: 'directory', inlineStylesheets: 'always' },
   // scoped styles as classes (not data-astro-cid-* attributes) — fewer bytes on every element

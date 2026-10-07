@@ -8,9 +8,9 @@ modelled loosely on https://tai-shis.com/. The full plan and every decision (D1�
 
 - Astro (static output) + TypeScript strict. Plain CSS custom properties in `src/styles/tokens.css`.
 - Interactivity is vanilla TS (`<script>` in `.astro` files). **No React, no Tailwind.**
-- Cloudflare Pages Functions in `functions/api/*` are thin wrappers; their logic lives in
-  `src/agent/chat.ts` and `src/homelab/status.ts` so it runs under plain Node in tests.
-  Bindings + limits: `wrangler.toml`. Deploy steps: `docs/DEPLOY.md`.
+- Deployed as a Cloudflare **Worker** with static assets (`wrangler.toml`): `dist/` is served directly,
+  `src/worker.ts` handles only `/api/*`. Its logic lives in `src/agent/chat.ts` and
+  `src/homelab/status.ts` so it runs under plain Node in tests. Deploy steps: `docs/DEPLOY.md`.
 - Go homelab exporter in `homelab-exporter/` (own README, `go test ./...`).
 
 ## Layout
@@ -43,6 +43,7 @@ modelled loosely on https://tai-shis.com/. The full plan and every decision (D1�
 - `npm run check:e2e` — Playwright (system Chrome): keys, routes, cmd bar, agent (mocked), lightbox,
   blog, homelab panel (mocked), screenshots (1440 / 390) into `.artifacts/`.
 - `npm run check:api` — /api/chat + /api/status logic with fake AI / KV / fetch.
+- `node tests/remote.check.mjs <url>` — check a deployment (or `npx wrangler dev`) without spending neurons.
 - `npm run sync:devto` — import new dev.to posts. `npm run agent:pregen` — needs Cloudflare creds.
 
 ## Git

@@ -1,17 +1,18 @@
 # Deploy runbook — eschmechel.dev v3
 
-Static Astro site + two Pages Functions on Cloudflare Pages. Nothing here has been run against the
-real account yet — every step that touches Cloudflare is yours to run (wrangler isn't logged in on
-the build machine).
+Static Astro site served by a **Cloudflare Worker** (`eschmechel-v3`): Workers static assets serve
+`dist/`, and `src/worker.ts` handles only `/api/*`. The live v1 site stays on the Pages project
+`eschmechel-dev` until launch.
 
-## 1. Pages project (preview first — D24)
+## 1. Worker + Workers Builds (Q5)
 
-1. Cloudflare dashboard → Workers & Pages → Create → Pages → connect `eschmechel/eschmechel.dev`.
-2. Production branch: keep `main` for now. Preview branch: `portfolio-v3`.
-3. Build command `npm run build`, output `dist`, Node 22+.
-4. Launch later = Settings → Builds → change **production branch** to `portfolio-v3` (rollback = change it back).
-
-`wrangler.toml` in the repo makes its bindings the source of truth; dashboard binding edits are ignored.
+- Dashboard: Workers & Pages → `eschmechel-v3` → Settings → Build: repo `eschmechel/eschmechel.dev`,
+  branch `portfolio-v3`, build `npm run build`, deploy `npx wrangler deploy`, root `/`, `NODE_VERSION=22`.
+- Every push to `portfolio-v3` builds + deploys to `eschmechel-v3.<subdomain>.workers.dev`.
+- Manual deploy from a checkout: `npm run build && npx wrangler deploy`.
+- Verify any deployment: `node tests/remote.check.mjs <url>` (spends no AI neurons).
+- The old Pages project builds previews of every pushed branch; set its Branch control → Preview
+  branches to *None* so `portfolio-v3` pushes don't create failing previews there.
 
 ## 2. Agent (/api/chat) — Phase 7
 
@@ -37,8 +38,8 @@ npx wrangler kv namespace create AGENT_KV       # paste the id into wrangler.tom
 - Hard spend cap (D17): the neuron budget stops model calls at 9000/day. If the account is on
   Workers Paid, also set a billing notification in the dashboard as a belt-and-braces alert.
 
-Local check without an account: `npm run check:api` (mock AI + KV). `wrangler pages dev dist`
-needs `CLOUDFLARE_API_TOKEN` because the AI binding is always remote.
+Local check without an account: `npm run check:api` (mock AI + KV). `npx wrangler dev` runs the
+real Workers runtime locally (the AI binding is always remote, so real questions cost neurons).
 
 ## 3. Homelab status (/api/status) — Phase 8
 
@@ -49,11 +50,11 @@ See [`homelab-exporter/README.md`](../homelab-exporter/README.md) for the export
    `http://127.0.0.1:9477`.
 3. Zero Trust → Access → Applications → self-hosted app for `status.lab.eschmechel.dev`, policy
    **Service Auth** only. Create a **service token** for it.
-4. Give the token to Pages and point the function at the tunnel:
+4. Give the token to the Worker and point it at the tunnel:
 
    ```sh
-   npx wrangler pages secret put HOMELAB_ACCESS_CLIENT_ID
-   npx wrangler pages secret put HOMELAB_ACCESS_CLIENT_SECRET
+   npx wrangler secret put HOMELAB_ACCESS_CLIENT_ID
+   npx wrangler secret put HOMELAB_ACCESS_CLIENT_SECRET
    # wrangler.toml [vars]: HOMELAB_STATUS_URL = "https://status.lab.eschmechel.dev/status"
    ```
 
@@ -61,7 +62,7 @@ Until those are set, the `~/` homelab panel shows "not wired up yet" rather than
 
 ## 4. Daily rebuild (keeps the GitHub heatmap fresh)
 
-1. Pages project → Settings → Builds → **Deploy hooks** → add one for the production branch.
+1. Worker → Settings → Build → **Deploy hooks** (or a Cloudflare API token + `wrangler deploy` in Actions).
 2. GitHub repo → Settings → Secrets → Actions → `PAGES_DEPLOY_HOOK` = that URL.
 3. `.github/workflows/daily-rebuild.yml` then pings it at 09:17 UTC. **GitHub only runs scheduled
    workflows from the default branch**, so this starts working once `portfolio-v3` is the repo's

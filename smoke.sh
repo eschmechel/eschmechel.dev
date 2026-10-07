@@ -39,9 +39,9 @@ check "every post page renders (canonical → eschmechel.dev)" bash -c '
     curl -fsL "http://127.0.0.1:'"$PORT"'/blog/$slug" | grep -q "<link rel=\"canonical\" href=\"https://eschmechel.dev/blog/$slug\"" || exit 1
   done'
 check "rss.xml lists every post" bash -c "[ \$(curl -fs http://127.0.0.1:$PORT/rss.xml | grep -o '<item>' | wc -l) -eq \$(ls dist/blog | grep -vc index.html) ]"
-check "sitemap includes posts" bash -c "grep -q '/blog/your-ai-slop-bores-me/' dist/sitemap-0.xml"
+check "sitemap includes posts" bash -c "grep -q '/blog/your-ai-slop-bores-me</loc>' dist/sitemap-0.xml"
 check "agent API logic (mock AI + KV)" node tests/api.check.mjs
-check "Pages Functions bundle" bash -c "npx wrangler pages functions build --outdir \"\${TMPDIR:-/tmp}/eschmechel-fn\" >/dev/null 2>&1"
+check "Worker bundles (wrangler deploy --dry-run)" bash -c "npx wrangler deploy --dry-run --outdir \"\${TMPDIR:-/tmp}/eschmechel-worker\" >/dev/null 2>&1"
 if command -v go >/dev/null; then
   check "homelab exporter: go vet + go test" bash -c "cd homelab-exporter && go vet ./... && go test -count=1 ./..."
 fi

@@ -1,12 +1,21 @@
-# Cloudflare Pages project config. With this file present, bindings below are the source of truth
-# (dashboard binding edits are ignored). See docs/DEPLOY.md.
-name = "eschmechel-v3"   # NOT eschmechel-dev — that project serves the live v1 site
-pages_build_output_dir = "dist"
+# Cloudflare Worker (static assets + /api/* Worker) — deployed by Workers Builds on push to
+# portfolio-v3, or `npx wrangler deploy`. See docs/DEPLOY.md.
+# NOT `eschmechel-dev`: that Pages project serves the live v1 site until launch.
+name = "eschmechel-v3"
+main = "src/worker.ts"
 compatibility_date = "2026-10-01"
+
+[assets]
+directory = "./dist"
+binding = "ASSETS"
+not_found_handling = "404-page"        # dist/404.html with a real 404 status
+html_handling = "drop-trailing-slash"  # /projects, not /projects/ — matches canonical + sitemap
+run_worker_first = ["/api/*"]          # everything else never touches the Worker
 
 # Workers AI — the agent model (src/agent/core.ts MODEL)
 [ai]
 binding = "AI"
+remote = true  # Workers AI always runs remotely (and is billed) — even under wrangler dev
 
 # KV — answer cache, per-IP hourly counters, daily neuron budget, homelab last-seen snapshot.
 # Create once with:  npx wrangler kv namespace create AGENT_KV   and paste the id here.
@@ -18,4 +27,4 @@ id = "REPLACE_WITH_AGENT_KV_ID"
 AGENT_HOURLY_LIMIT = "20"     # model answers per IP per hour (cache hits are free)
 AGENT_DAILY_NEURONS = "9000"  # stays under the 10k/day free Workers AI allocation
 HOMELAB_STATUS_URL = ""       # e.g. https://status.lab.eschmechel.dev/status (behind Cloudflare Access)
-# Secrets (not here): npx wrangler pages secret put HOMELAB_ACCESS_CLIENT_ID / HOMELAB_ACCESS_CLIENT_SECRET
+# Secrets (not here): npx wrangler secret put HOMELAB_ACCESS_CLIENT_ID / HOMELAB_ACCESS_CLIENT_SECRET
