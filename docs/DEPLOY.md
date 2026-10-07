@@ -1,18 +1,16 @@
 # Deploy runbook — eschmechel.dev v3
 
-Static Astro site served by a **Cloudflare Worker** (`eschmechel-v3`): Workers static assets serve
-`dist/`, and `src/worker.ts` handles only `/api/*`. The live v1 site stays on the Pages project
-`eschmechel-dev` until launch.
+Static Astro site served by a **Cloudflare Worker** (`eschmechel-v3`) on eschmechel.dev + www:
+Workers static assets serve `dist/`, and `src/worker.ts` handles only `/api/*`. Branch `main` is v3;
+v1 lives on as the `v1-archive` branch (its old Pages project was deleted at launch).
 
 ## 1. Worker + Workers Builds (Q5)
 
 - Dashboard: Workers & Pages → `eschmechel-v3` → Settings → Build: repo `eschmechel/eschmechel.dev`,
-  branch `portfolio-v3`, build `npm run build`, deploy `npx wrangler deploy`, root `/`, `NODE_VERSION=22`.
-- Every push to `portfolio-v3` builds + deploys to `eschmechel-v3.<subdomain>.workers.dev`.
+  branch `main`, build `npm run build`, deploy `npx wrangler deploy`, root `/`, `NODE_VERSION=22`.
+- Every push to `main` builds + deploys to eschmechel.dev (custom domains are `routes` in wrangler.toml).
 - Manual deploy from a checkout: `npm run build && npx wrangler deploy`.
-- Verify any deployment: `node tests/remote.check.mjs <url>` (spends no AI neurons).
-- The old Pages project builds previews of every pushed branch; set its Branch control → Preview
-  branches to *None* so `portfolio-v3` pushes don't create failing previews there.
+- Verify any deployment: `node tests/remote.check.mjs https://eschmechel.dev` (spends no AI neurons).
 
 ## 2. Agent (/api/chat) — Phase 7
 
@@ -67,15 +65,16 @@ Hostname is `lab-status.eschmechel.dev` — one level deep, so the free Universa
 
 Until those are set, the `~/` homelab panel shows "not wired up yet" rather than erroring.
 
-## 4. Daily rebuild (keeps the GitHub heatmap fresh)
+## 4. Daily deploy (heatmap + pregenerated agent answers)
 
-1. Worker → Settings → Build → **Deploy hooks** (or a Cloudflare API token + `wrangler deploy` in Actions).
-2. GitHub repo → Settings → Secrets → Actions → `PAGES_DEPLOY_HOOK` = that URL.
-3. `.github/workflows/daily-rebuild.yml` then pings it at 09:17 UTC. **GitHub only runs scheduled
-   workflows from the default branch**, so this starts working once `portfolio-v3` is the repo's
-   default branch (or the workflow file is copied to `main`) — decide at launch.
+`.github/workflows/daily-deploy.yml` runs at 09:17 UTC (scheduled workflows only run from the default
+branch, `main`): build → `agent:pregen` (no-op unless content changed) → `smoke.sh` → `wrangler deploy`.
+
+- Repo secret `CLOUDFLARE_API_TOKEN`: "Edit Cloudflare Workers" template + Account › Workers AI › Read.
+- Run it on demand: Actions → daily deploy → Run workflow.
 
 ## 5. After launch (Phase 9 — ask first)
 
-- Flip dev.to `canonical_url` on each imported post to `https://eschmechel.dev/blog/<slug>`.
+- dev.to `canonical_url` → eschmechel.dev: done 2026-10-07; for newly imported posts run
+  `npm run devto:canonical` (dry run) then `-- --apply` (needs `DEVTO_API_KEY` in `.env`).
 - Cloudflare Web Analytics (D49).

@@ -17,6 +17,11 @@ if (!account || !token) {
 }
 
 const ctx = JSON.parse(readFileSync('dist/agent-context.json', 'utf8')) as { hash: string; text: string };
+const existing = JSON.parse(readFileSync('src/data/agent-answers.json', 'utf8')) as { hash: string; answers: Record<string, string> };
+if (existing.hash === ctx.hash && SUGGESTED.every((q) => existing.answers[q])) {
+  console.log(`agent:pregen — answers already pinned to content hash ${ctx.hash}; nothing to do.`);
+  process.exit(0);
+}
 const answers: Record<string, string> = {};
 
 for (const q of SUGGESTED) {

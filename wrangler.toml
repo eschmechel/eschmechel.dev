@@ -1,7 +1,7 @@
-# Cloudflare Worker (static assets + /api/* Worker) — deployed by Workers Builds on push to
-# portfolio-v3, or `npx wrangler deploy`. See docs/DEPLOY.md.
-# Serves eschmechel.dev + www since launch (2026-10-06). The old Pages project `eschmechel-dev`
-# (v1) is retired: no custom domains, production branch back on main.
+# Cloudflare Worker (static assets + /api/* Worker) — deployed by Workers Builds on push to main,
+# daily by .github/workflows/daily-deploy.yml, or `npx wrangler deploy`. See docs/DEPLOY.md.
+# Serves eschmechel.dev + www since launch (2026-10-06). v1 (old Pages project `eschmechel-dev`,
+# deleted) lives on as the `v1-archive` branch.
 name = "eschmechel-v3"
 main = "src/worker.ts"
 compatibility_date = "2026-10-01"

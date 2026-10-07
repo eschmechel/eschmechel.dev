@@ -1,6 +1,6 @@
 // GitHub contribution levels for the ~/ heatmap (D11, A5), fetched once at build time.
 // A failed fetch never fails the build — the panel just says so. Freshness comes from a daily
-// rebuild (.github/workflows/daily-rebuild.yml → Pages deploy hook).
+// deploy (.github/workflows/daily-deploy.yml).
 
 export interface Contributions {
   start: string; // ISO date of the first day

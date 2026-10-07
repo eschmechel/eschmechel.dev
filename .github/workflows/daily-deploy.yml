@@ -1,0 +1,29 @@
+# Rebuilds + redeploys once a day (Q27 A) so build-time data stays fresh: the GitHub heatmap, and the
+# pregenerated agent answers whenever site content has changed since they were last pinned.
+# Pushes to main are deployed by Workers Builds; this only covers "nothing was pushed today".
+#
+# Setup: repo secret CLOUDFLARE_API_TOKEN — "Edit Cloudflare Workers" template + Account › Workers AI › Read.
+# Without it the job fails loudly at the deploy step (pregen skips itself).
+name: daily deploy
+on:
+  schedule:
+    - cron: '17 9 * * *' # 09:17 UTC daily
+  workflow_dispatch:
+concurrency: daily-deploy
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      CLOUDFLARE_ACCOUNT_ID: 8591cc47c530918025357f1eeab73ce6
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24 # runs scripts/*.ts natively
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npm run agent:pregen # no-op when answers already match the content hash
+      - run: ./smoke.sh # rebuilds with the fresh answers, then checks the built site
+      - run: npx wrangler deploy --message "daily deploy ${GITHUB_SHA::7}"
