@@ -11,6 +11,8 @@ modelled loosely on https://tai-shis.com/. The full plan and every decision (D1â
 - Deployed as a Cloudflare **Worker** with static assets (`wrangler.toml`): `dist/` is served directly,
   `src/worker.ts` handles only `/api/*`. Its logic lives in `src/agent/chat.ts` and
   `src/homelab/status.ts` so it runs under plain Node in tests. Deploy steps: `docs/DEPLOY.md`.
+- Branches: `main` is v3 â€” every push deploys to eschmechel.dev (Workers Builds), plus a daily
+  `.github/workflows/daily-deploy.yml` run. `v1-archive` is the old site; never build on it.
 - Go homelab exporter in `homelab-exporter/` (own README, `go test ./...`).
 
 ## Layout
