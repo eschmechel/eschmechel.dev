@@ -1,8 +1,13 @@
 - id: building
   label: building
-  text: this site, v3
+  text: the Langara CS Club website redesign
   verified: true
-  source: drafted by Claude, confirmed by user 2026-10-06
+  source: user chat 2026-10-06 (VP answer — "currently working on the website redesign")
+- id: building-bot
+  label: building
+  text: a universal post-secondary Discord bot
+  verified: true
+  source: user chat 2026-10-06 (VP answer)
 - id: studying
   label: studying
   text: final year of CS at Langara
