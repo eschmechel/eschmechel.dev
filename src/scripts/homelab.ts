@@ -81,11 +81,17 @@ function render(root: HTMLElement, data: Status | null): void {
   }
 
   if (data.services?.length) {
+    root.append(el('p', 'lab__svchead', 'services · uptime, last 24h'));
     const list = el('ul', 'lab__svcs');
     for (const s of data.services) {
       const li = el('li', s.up ? 'is-up' : 'is-down');
       li.append(el('span', 'lab__dot', s.up ? '●' : '○'), ` ${s.name}`);
-      if (s.uptime24hPct !== null) li.append(el('span', 'lab__pct', ` ${s.uptime24hPct}%`));
+      if (s.uptime24hPct !== null) {
+        // floor, not round: 99.96% must not read as 100%
+        const pct = el('span', 'lab__pct', ` ${Math.floor(s.uptime24hPct * 10) / 10}%`);
+        pct.title = 'uptime over the last 24 hours';
+        li.append(pct);
+      }
       list.append(li);
     }
     root.append(list);

@@ -113,11 +113,15 @@ const opinions = await Promise.all(
   .lab :global(tr.is-down td) {
     color: var(--warn);
   }
+  .lab :global(.lab__svchead) {
+    margin: 0.9rem 0 0.3rem;
+    font-size: var(--fs-sm);
+    color: var(--fg-dim); /* same voice as the table's column headers */
+  }
   .lab :global(.lab__svcs) {
     display: flex;
     flex-wrap: wrap;
     gap: 0.4rem 1.2rem;
-    margin-top: 0.8rem;
     font-size: var(--fs-sm);
   }
   .lab :global(.is-up .lab__dot) {

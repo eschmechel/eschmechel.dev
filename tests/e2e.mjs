@@ -378,7 +378,7 @@ const LIVE = {
     { name: 'hermes', online: false, cpuPct: 0, memPct: 0, tempC: null, uptimeS: 0, guestsRunning: 0 },
   ],
   services: [
-    { name: 'Jellyfin', up: true, uptime24hPct: 99.9 },
+    { name: 'Jellyfin', up: true, uptime24hPct: 99.96 }, // must floor to 99.9%, never read 100%
     { name: 'Gitea', up: false, uptime24hPct: 97.1 },
   ],
 };
@@ -392,9 +392,10 @@ await check('homelab: no polling until ~/ is showing, then renders the live tabl
   await desktop.keyboard.press('5');
   await desktop.waitForFunction(() => document.querySelector('#homelab')?.dataset.state === 'live');
   const l = await lab();
-  for (const want of ['atlas', '12.3%', '25%', '47°C', '4d 4h', 'hermes', 'down', 'Jellyfin', '99.9%', 'Gitea', 'updated']) {
+  for (const want of ['atlas', '12.3%', '25%', '47°C', '4d 4h', 'hermes', 'down', 'uptime, last 24h', 'Jellyfin', '99.9%', 'Gitea', 'updated']) {
     expect(l.text.includes(want), `missing "${want}" in: ${l.text}`);
   }
+  expect(!l.text.includes('100%') && !l.text.includes('99.96'), `uptime not floored to 1 dp: ${l.text}`);
   expect(statusCalls === 1, `calls ${statusCalls}`);
 });
 
