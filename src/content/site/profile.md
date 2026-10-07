@@ -3,7 +3,7 @@ name: Elliott Schmechel
 handle: eschmechel
 headline: Systems-focused builder — GPU training infra, self-training agents, real-time edge apps.
 facts:
-  - { icon: '</>', text: 'Volunteer fullstack @ UNAC-Vancouver' }
+  - { icon: '</>', text: 'Building a universal post-secondary Discord bot' }
   - { icon: '⌘', text: 'VP @ Langara Computer Science Club' }
   - { icon: '◇', text: 'CS @ Langara · grad May 2027' }
   - { icon: '⌖', text: 'Vancouver, BC' }
@@ -14,14 +14,14 @@ socials:
   - { label: dev.to, href: 'https://dev.to/eschmechel' }
 resumePdf: /Elliott-Schmechel-Resume.pdf
 verified: true
-source: interview D50/D29/D36; about drafted by Claude, confirmed by user 2026-10-06
+source: interview D50/D29/D36; about drafted by Claude, confirmed by user 2026-10-06; lead fact → Discord bot (Q12 C, 2026-10-06)
 ---
 
-I ship end to end across Go, C++, TypeScript and Python — from GPU training infrastructure and
+I ship end to end across Go, C++, TypeScript and Python from GPU training infrastructure and
 self-training AI agents to real-time apps at the edge.
 
 Most recently: an on-device lip-reading pipeline at StormHacks, a loop that turns an agent's
 repeated work into small fine-tuned specialists, and a summer as a Technical Content Engineer at
 LicenseSpring writing SDK samples and developer education.
 
-Final-year CS at Langara. Daily driver: Arch.
+Final-year CS at Langara. Daily driver: Arch linux.
