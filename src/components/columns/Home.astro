@@ -86,10 +86,12 @@ const opinions = await Promise.all(
 <style>
   .scene {
     margin: 0;
-    font: 0.8rem/1 var(--font);
+    /* 41 cols × ~0.63em advance; the panel is 100vw − 61px on phones, so shrink to fit */
+    font: min(0.8rem, (100vw - 64px) / 26) / 1 var(--font);
     font-variant-ligatures: none;
     color: var(--fg-strong);
-    overflow-x: auto;
+    padding-block: 1px; /* line-height 1 glyphs overhang by ~1px */
+    overflow: hidden;
   }
   /* rendered by src/scripts/homelab.ts, so these need :global */
   .lab :global(table) {
